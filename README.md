@@ -1,2 +1,2 @@
-# ToDoApp
-To Do App using Native Android and Jetpack Compose
+# ProtocolDescriptor
+This app will allow to create protocols (procedures) to take place during an emergency. Built using Native Android and Jetpack Compose.
