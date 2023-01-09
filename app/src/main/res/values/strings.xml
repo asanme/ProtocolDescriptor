@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">ProtocolDescriptor</string>
+    <string name="return_arrow">Return Arrow</string>
+    <string name="acronym_icon">Acronym Icon</string>
+    <string name="protocol_icon">Protocol Icon</string>
+    <string name="protocol_label">Protocol name</string>
+    <string name="acronym_label">Acronym</string>
+    <string name="task_label">Task</string>
+    <string name="pencil_icon">Pencil Icon</string>
 </resources>
