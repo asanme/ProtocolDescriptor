@@ -1,6 +1,5 @@
 package com.asanme.protocoldescriptor
 
-import AddProtocolView
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,6 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.asanme.protocoldescriptor.ui.theme.ProtocolDescriptorTheme
+import com.asanme.protocoldescriptor.view.component.AddProtocolView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

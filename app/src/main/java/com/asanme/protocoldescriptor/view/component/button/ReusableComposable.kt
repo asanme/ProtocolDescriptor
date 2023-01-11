@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 fun CustomRoundedButton(
     modifier: Modifier = Modifier,
     buttonSize: Dp = 50.dp,
+    backgroundColor: Color = Color.White,
     onClick: () -> Unit,
     content: @Composable (RowScope) -> Unit,
 ) {
@@ -32,7 +34,7 @@ fun CustomRoundedButton(
         shape = RoundedCornerShape(10.dp),
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Color.White,
+            backgroundColor = backgroundColor
         ),
         modifier = modifier.size(buttonSize),
         content = content
@@ -42,14 +44,15 @@ fun CustomRoundedButton(
 @Composable
 fun CustomImage(
     modifier: Modifier = Modifier,
-    imageSize: Dp = 20.dp,
+    contentScale: ContentScale = ContentScale.Crop,
     @DrawableRes imageVectorResource: Int,
-    @StringRes contentDescriptionResource: Int
+    @StringRes contentDescriptionResource: Int,
 ) {
     Image(
         imageVector = ImageVector.vectorResource(id = imageVectorResource),
         contentDescription = stringResource(id = contentDescriptionResource),
-        modifier = modifier.size(imageSize)
+        modifier = modifier,
+        contentScale = contentScale
     )
 }
 
