@@ -1,4 +1,4 @@
-package com.asanme.protocoldescriptor.misc
+package com.asanme.protocoldescriptor.fonts
 
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily

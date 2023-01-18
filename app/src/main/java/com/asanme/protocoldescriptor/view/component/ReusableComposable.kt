@@ -1,6 +1,5 @@
-package com.asanme.protocoldescriptor.view.component.button
+package com.asanme.protocoldescriptor.view.component
 
-import com.asanme.protocoldescriptor.R
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
@@ -22,7 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CustomRoundedButton(
+fun CustomButton(
     modifier: Modifier = Modifier,
     buttonSize: Dp = 50.dp,
     backgroundColor: Color = Color.White,

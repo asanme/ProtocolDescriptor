@@ -8,7 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.asanme.protocoldescriptor.ui.theme.ProtocolDescriptorTheme
-import com.asanme.protocoldescriptor.view.component.AddProtocolView
+import com.asanme.protocoldescriptor.view.AddProtocolView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
