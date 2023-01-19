@@ -8,4 +8,5 @@
     <string name="return_arrow">Return Arrow Icon</string>
     <string name="acronym_icon">Acronym Icon</string>
     <string name="protocol_icon">Protocol Icon</string>
+    <string name="cancel_icon">Cancel Icon</string>
 </resources>
