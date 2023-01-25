@@ -1,6 +1,8 @@
 package com.asanme.protocoldescriptor.view
 
-import androidx.compose.animation.*
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -36,7 +38,6 @@ import com.asanme.protocoldescriptor.view.component.CustomButton
 import com.asanme.protocoldescriptor.view.component.CustomEditText
 import com.asanme.protocoldescriptor.view.component.CustomIcon
 import com.asanme.protocoldescriptor.view.component.CustomImage
-import java.util.Deque as Deque
 
 @Composable
 fun AddProtocolView() {
@@ -116,15 +117,6 @@ fun ProtocolHeader() {
 
 @Composable
 private fun ProtocolBody() {
-    val actions by rememberSaveable {
-        mutableStateOf(
-            ActionEntity(
-                "Testing",
-                "Description"
-            )
-        )
-    }
-
     var isMenuShown by rememberSaveable {
         mutableStateOf(false)
     }
@@ -196,12 +188,77 @@ private fun TaskTitle() {
 @Composable
 private fun ActionContainer() {
     val scrollState = rememberScrollState()
-    val elementQueue = Deque<ActionEntity>
+    val elements by rememberSaveable {
+        mutableStateOf(
+            ActionEntity(
+                "First Element",
+                "First Description"
+            )
+        )
+    }
+    val secondElement = ActionEntity("Second Element", "Second Description")
+    elements.decisionYes = secondElement
+    val thirdElement = ActionEntity("Third Element", "Third Description")
+    secondElement.decisionYes = thirdElement
+    val fourthElement = ActionEntity("Fourth Element", "Fourth Element")
+    thirdElement.decisionNo = fourthElement
+
     LazyColumn(
         modifier = Modifier
             .horizontalScroll(scrollState)
             .fillMaxWidth()
     ) {
+        fun displayActionTree(node: ActionEntity, level: Int = 0) {
+            item {
+                ActionItem(
+                    Modifier.padding(
+                        start = level.dp,
+                    ),
+                    node
+                )
+            }
+
+            item {
+                DecisionItem(
+                    Modifier.padding(start = level.dp),
+                    Decision.YES,
+                )
+            }
+
+            node.decisionYes?.let {
+                displayActionTree(it, level + 30)
+            } ?: run {
+                item {
+                    NullItem(
+                        Modifier.padding(start = level.dp),
+                    )
+                }
+            }
+
+
+            item {
+                DecisionItem(
+                    Modifier.padding(start = level.dp),
+                    Decision.NO,
+                )
+            }
+
+            node.decisionNo?.let {
+                displayActionTree(it, evel + 30)
+            } ?: run {
+                item {
+                    NullItem(
+                        Modifier.padding(start = level.dp),
+                    )
+                }
+            }
+        }
+
+        displayActionTree(elements)
+    }
+}
+
+/* example of nested structure, but not functional
         item {
             TaskItem(
                 Modifier.padding(start = (0).dp)
@@ -229,8 +286,7 @@ private fun ActionContainer() {
                 )
             )
         }
-    }
-}
+*/
 
 @Composable
 private fun AddActionButton(
@@ -261,29 +317,27 @@ private fun AddActionButton(
 }
 
 @Composable
-fun TaskItem(
-    modifier: Modifier = Modifier
+fun ActionItem(
+    modifier: Modifier = Modifier,
+    actionEntity: ActionEntity
 ) {
     Card(
         shape = RoundedCornerShape(10.dp),
         elevation = 5.dp,
-        modifier = modifier.padding(
-            horizontal = 10.dp,
-            vertical = 5.dp
-        ),
+        modifier = modifier.padding(vertical = 5.dp)
     ) {
         Column(
             modifier = Modifier.padding(10.dp)
         ) {
             Text(
-                text = "Name: ...",
+                text = actionEntity.name,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color(3, 4, 94)
             )
 
             Text(
-                text = "Description: ...",
+                text = actionEntity.description,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal,
                 color = Color(3, 4, 94)
@@ -293,10 +347,8 @@ fun TaskItem(
 }
 
 @Composable
-fun OptionItem(
+fun NullItem(
     modifier: Modifier = Modifier,
-    decision: Decision,
-    decisionEntity: ActionEntity
 ) {
     var wasClicked by rememberSaveable {
         mutableStateOf(false)
@@ -305,7 +357,49 @@ fun OptionItem(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = modifier
+        modifier = modifier.padding(vertical = 5.dp)
+    ) {
+        Card(
+            shape = RoundedCornerShape(10.dp),
+            elevation = 5.dp,
+            modifier = modifier
+                .clickable {
+                    wasClicked = true
+                },
+            backgroundColor = if (wasClicked) Color.Yellow else Color.White
+        ) {
+            Row {
+                Column(
+                    modifier = Modifier.padding(
+                        vertical = 10.dp,
+                        horizontal = 20.dp
+                    )
+                ) {
+                    Text(
+                        text = Decision.NONE.text,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(3, 4, 94)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DecisionItem(
+    modifier: Modifier = Modifier,
+    decision: Decision,
+) {
+    var wasClicked by rememberSaveable {
+        mutableStateOf(false)
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = modifier.padding(vertical = 5.dp)
     ) {
         Box(
             modifier = Modifier
@@ -318,12 +412,10 @@ fun OptionItem(
             shape = RoundedCornerShape(10.dp),
             elevation = 5.dp,
             modifier = Modifier
-                .padding(vertical = 5.dp)
                 .clickable {
                     wasClicked = true
                 },
-            backgroundColor = if (wasClicked) Color.Yellow else Color.White
-
+            backgroundColor = if (wasClicked) Color(224, 73, 106) else Color.White
         ) {
             Row {
                 Column(
@@ -336,7 +428,7 @@ fun OptionItem(
                         text = decision.text,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(3, 4, 94)
+                        color = if (wasClicked) Color.White else Color(3, 4, 94)
                     )
                 }
             }
@@ -487,7 +579,6 @@ fun CustomCheckbox(
         }
     }
 }
-
 
 @Preview
 @Composable
