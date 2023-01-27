@@ -9,4 +9,9 @@
     <string name="acronym_icon">Acronym Icon</string>
     <string name="protocol_icon">Protocol Icon</string>
     <string name="cancel_icon">Cancel Icon</string>
+    <string name="prev_action">Previous Action</string>
+    <string name="action_name">Action name</string>
+    <string name="action_description">Description</string>
+    <string name="done">Done</string>
+    <string name="discard">Discard</string>
 </resources>

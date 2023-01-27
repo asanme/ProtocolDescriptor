@@ -30,8 +30,10 @@ object Main {
         println("   ".repeat(level) + "→ Name: ${node.name}")
         println("   ".repeat(level) + "→ Description: ${node.description}")
         println("   ".repeat(level) + "→ ActionYes: ")
-        node.decisionYes?.let { displayActionTree(it, level + 1) } ?: println("   ".repeat(level + 1) + "→ None")
+        node.decisionYes?.let { displayActionTree(it, level + 1) }
+            ?: println("   ".repeat(level + 1) + "→ None")
         println("   ".repeat(level) + "→ ActionNo: ")
-        node.decisionNo?.let { displayActionTree(it, level + 1) } ?: println("   ".repeat(level + 1) + "→ None")
+        node.decisionNo?.let { displayActionTree(it, level + 1) }
+            ?: println("   ".repeat(level + 1) + "→ None")
     }
 }
