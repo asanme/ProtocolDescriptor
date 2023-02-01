@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,9 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.model.entity.ActionEntity
 import com.asanme.protocoldescriptor.model.enum.Decision
 
@@ -136,6 +140,104 @@ fun DecisionItem(
                         fontWeight = FontWeight.Bold,
                         color = if (wasClicked) Color.White else Color(3, 4, 94)
                     )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun NewElement(
+    modifier: Modifier = Modifier,
+) {
+    var actionText by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    var descriptionText by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = modifier.padding(vertical = 5.dp)
+    ) {
+        Card(
+            shape = RoundedCornerShape(10.dp),
+            elevation = 5.dp,
+            backgroundColor = Color.White,
+        ) {
+            Column {
+                CustomEditText(
+                    label = {
+                        Text(
+                            stringResource(R.string.action_name),
+                            color = Color(3, 4, 94),
+                        )
+                    },
+                    onValueChange = { enteredAction ->
+                        actionText = enteredAction
+                    },
+                    text = actionText
+                )
+
+                CustomEditText(
+                    label = {
+                        Text(
+                            stringResource(R.string.action_description),
+                            color = Color(3, 4, 94),
+                        )
+                    },
+                    onValueChange = { enteredDescription ->
+                        descriptionText = enteredDescription
+                    },
+                    text = descriptionText
+                )
+
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(20.dp)
+                ) {
+                    Button(
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(224, 73, 106)
+                        ),
+                        onClick = {
+
+                        },
+                        modifier = Modifier
+                            .weight(5f)
+                            .height(40.dp),
+                    ) {
+                        Text(
+                            text = stringResource(R.string.discard),
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+
+                    Button(
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(221, 224, 73)
+                        ),
+                        onClick = {
+
+                        },
+                        modifier = Modifier
+                            .weight(5f)
+                            .height(40.dp),
+                    ) {
+                        Text(
+                            text = stringResource(R.string.done),
+                            color = Color(3, 4, 94),
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 }
             }
         }

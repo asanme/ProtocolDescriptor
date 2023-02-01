@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -29,6 +30,13 @@ fun AddProtocolView() {
     Column(
         Modifier.fillMaxSize()
     ) {
+        SingleElement(
+            ActionEntity(
+                "Testing with the title this is a little too long",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum ex lorem, non malesuada lectus dignissim sit amet. Praesent aliquet ante sit amet pellentesque tincidunt. Fusce interdum mi sem, ultricies imperdiet tellus auctor ut. Nunc volutpat mi tellus.",
+            )
+        )
+
         ProtocolHeader()
         ProtocolBody()
     }
@@ -226,96 +234,127 @@ private fun ActionContainer() {
 }
 
 @Composable
-fun NewElement(
+fun SingleElement(
+    entity: ActionEntity,
     modifier: Modifier = Modifier,
 ) {
-    var actionText by rememberSaveable {
-        mutableStateOf("")
+    var isExpanded by rememberSaveable {
+        mutableStateOf(false)
     }
 
-    var descriptionText by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = modifier.padding(vertical = 5.dp)
-    ) {
+    Column {
         Card(
             shape = RoundedCornerShape(10.dp),
-            elevation = 5.dp,
             backgroundColor = Color.White,
+            elevation = 5.dp,
         ) {
-            Column {
-                CustomEditText(
-                    label = {
-                        Text(
-                            stringResource(R.string.action_name),
-                            color = Color(3, 4, 94),
-                        )
-                    },
-                    onValueChange = { enteredAction ->
-                        actionText = enteredAction
-                    },
-                    text = actionText
+            Column(
+                modifier = Modifier.padding(10.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    CustomImage(
+                        imageVectorResource = R.drawable.minimize,
+                        contentDescriptionResource = R.string.minimize_icon,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+
+                Text(
+                    text = entity.name,
+                    fontFamily = interFamily,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(3, 4, 94),
+                    fontSize = 20.sp,
+                    textAlign = TextAlign.Justify
                 )
 
-                CustomEditText(
-                    label = {
-                        Text(
-                            stringResource(R.string.action_description),
-                            color = Color(3, 4, 94),
-                        )
-                    },
-                    onValueChange = { enteredDescription ->
-                        descriptionText = enteredDescription
-                    },
-                    text = descriptionText
+                Text(
+                    text = entity.description,
+                    fontFamily = interFamily,
+                    fontWeight = FontWeight.Normal,
+                    color = Color(3, 4, 94),
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Justify
+                )
+
+                Text(
+                    text = stringResource(id = R.string.actions),
+                    fontFamily = interFamily,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(3, 4, 94),
+                    fontSize = 18.sp,
+                    textAlign = TextAlign.Justify
                 )
 
                 Row(
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp),
-                    horizontalArrangement = Arrangement.spacedBy(20.dp)
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     Button(
-                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier
+                            .height(50.dp)
+                            .weight(5f),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(221, 224, 73)
+                            backgroundColor = Color(221, 224, 73),
                         ),
+                        shape = RoundedCornerShape(30.dp),
                         onClick = {
 
                         },
-                        modifier = Modifier
-                            .weight(5f)
-                            .height(40.dp),
                     ) {
-                        Text(
-                            text = stringResource(R.string.done),
-                            color = Color(3, 4, 94),
-                            fontWeight = FontWeight.Bold
-                        )
+                        Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                            Text(
+                                text = "Yes:",
+                                fontFamily = interFamily,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(3, 4, 94),
+                                fontSize = 14.sp,
+                            )
+                            Text(
+                                text = "Not assigned",
+                                fontFamily = interFamily,
+                                fontWeight = FontWeight.Normal,
+                                color = Color(3, 4, 94),
+                                fontSize = 14.sp,
+                            )
+
+                        }
                     }
 
                     Button(
-                        shape = RoundedCornerShape(10.dp),
+                        modifier = Modifier
+                            .height(50.dp)
+                            .weight(5f),
                         colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(224, 73, 106)
+                            backgroundColor = Color(224, 73, 106),
                         ),
+                        shape = RoundedCornerShape(30.dp),
                         onClick = {
 
                         },
-                        modifier = Modifier
-                            .weight(5f)
-                            .height(40.dp),
                     ) {
-                        Text(
-                            text = stringResource(R.string.discard),
-                            color = Color.White,
-                            fontWeight = FontWeight.Bold,
-                        )
+                        Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                            Text(
+                                text = "No:",
+                                fontFamily = interFamily,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White,
+                                fontSize = 14.sp,
+                            )
+
+                            Text(
+                                text = "Assigned",
+                                fontFamily = interFamily,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.White,
+                                fontSize = 14.sp,
+                            )
+
+                        }
                     }
                 }
             }
@@ -332,10 +371,14 @@ fun TestPreview() {
     Column(
         Modifier.fillMaxSize()
     ) {
-        NewElement()
+        SingleElement(
+            ActionEntity(
+                "Testing with the title",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum ex lorem, non malesuada lectus dignissim sit amet. Praesent aliquet ante sit amet pellentesque tincidunt. Fusce interdum mi sem, ultricies imperdiet tellus auctor ut. Nunc volutpat mi tellus.",
+            )
+        )
     }
 }
-
 
 @Preview(
     device = Devices.NEXUS_6,

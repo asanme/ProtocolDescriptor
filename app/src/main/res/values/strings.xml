@@ -14,4 +14,6 @@
     <string name="action_description">Description</string>
     <string name="done">Done</string>
     <string name="discard">Discard</string>
+    <string name="minimize_icon">Minimize</string>
+    <string name="actions">Actions</string>
 </resources>
