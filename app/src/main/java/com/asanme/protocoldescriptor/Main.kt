@@ -1,21 +1,22 @@
 package com.asanme.protocoldescriptor
 
-import com.asanme.protocoldescriptor.model.entity.ActionEntity
+import com.asanme.protocoldescriptor.model.entity.ProtocolTask
 
+//Testing file
 object Main {
     @JvmStatic
     fun main(args: Array<String>) {
 
-        val firstNode = ActionEntity(
+        val firstNode = ProtocolTask(
             "First Element",
             "First Description"
         )
 
-        val secondNode = ActionEntity(
+        val secondNode = ProtocolTask(
             "Second Element",
             "Second Description"
         )
-        val thirdNode = ActionEntity(
+        val thirdNode = ProtocolTask(
             "Third Element",
             "Third Description"
         )
@@ -26,7 +27,7 @@ object Main {
         displayActionTree(firstNode)
     }
 
-    private fun displayActionTree(node: ActionEntity, level: Int = 0) {
+    private fun displayActionTree(node: ProtocolTask, level: Int = 0) {
         println("   ".repeat(level) + "→ Name: ${node.name}")
         println("   ".repeat(level) + "→ Description: ${node.description}")
         println("   ".repeat(level) + "→ ActionYes: ")

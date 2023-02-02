@@ -4,9 +4,9 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class ActionEntity(
+data class ProtocolTask(
     var name: String,
     var description: String,
-    var decisionYes: ActionEntity? = null,
-    var decisionNo: ActionEntity? = null
+    var decisionYes: ProtocolTask? = null,
+    var decisionNo: ProtocolTask? = null
 ) : Parcelable

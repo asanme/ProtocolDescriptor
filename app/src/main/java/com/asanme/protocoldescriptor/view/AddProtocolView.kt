@@ -1,9 +1,10 @@
 package com.asanme.protocoldescriptor.view
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Divider
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,29 +15,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
-import com.asanme.protocoldescriptor.model.entity.ActionEntity
-import com.asanme.protocoldescriptor.model.enum.Decision
+import com.asanme.protocoldescriptor.model.entity.ProtocolTask
 import com.asanme.protocoldescriptor.ui.component.*
 
 @Composable
 fun AddProtocolView() {
     Column(
-        Modifier.fillMaxSize()
+        Modifier
+            .fillMaxSize()
+            .padding(10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        SingleElement(
-            ActionEntity(
-                "Testing with the title this is a little too long",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum ex lorem, non malesuada lectus dignissim sit amet. Praesent aliquet ante sit amet pellentesque tincidunt. Fusce interdum mi sem, ultricies imperdiet tellus auctor ut. Nunc volutpat mi tellus.",
-            )
-        )
-
         ProtocolHeader()
         ProtocolBody()
     }
@@ -44,27 +39,30 @@ fun AddProtocolView() {
 
 @Composable
 fun ProtocolHeader() {
-    var protocolText by rememberSaveable {
-        mutableStateOf("")
-    }
+    TopControls()
+    ProtocolFields()
+}
 
-    var acronymText by rememberSaveable {
-        mutableStateOf("")
-    }
+@Composable
+private fun ProtocolBody() {
+    TaskTitle()
+    Divider(thickness = 2.dp)
+    ActionContainer()
+}
 
+@Composable
+private fun TopControls() {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
     ) {
         Box(Modifier.weight(2f)) {
-            CustomButton(
+            MSquaredButton(
                 onClick = {
 
                 },
             ) {
-                CustomImage(
+                MImageContainer(
                     imageVectorResource = R.drawable.arrow,
                     contentDescriptionResource = R.string.return_arrow
                 )
@@ -79,73 +77,67 @@ fun ProtocolHeader() {
                 text = "Add new protocol",
                 fontFamily = interFamily,
                 fontWeight = FontWeight.Normal,
-                color = Color(3, 4, 94),
+                color = Color(0xFF03045E),
                 fontSize = 20.sp,
             )
         }
 
         Box(Modifier.weight(2f))
     }
+}
 
-    CustomEditText(
+@Composable
+private fun ProtocolFields() {
+    var protocolText by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    var acronymText by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    MEditText(
         label = {
             Text(stringResource(id = R.string.protocol_label))
         },
         leadingIcon = {
-            CustomIcon(
+            MIconContainer(
                 R.drawable.protocol_icon,
                 R.string.protocol_icon
             )
         },
-        { newText ->
+        text = protocolText,
+        singleLine = true,
+        onValueChange = { newText ->
             protocolText = newText
         },
-        protocolText,
-        true
     )
 
-    CustomEditText(
+    MEditText(
         label = {
             Text(stringResource(id = R.string.acronym_label))
         },
         leadingIcon = {
-            CustomIcon(
+            MIconContainer(
                 R.drawable.acronym_icon,
                 R.string.acronym_icon
             )
         },
-        { newText ->
+        text = acronymText,
+        singleLine = true,
+        onValueChange = { newText ->
             acronymText = newText
         },
-        acronymText,
-        true
     )
 }
 
 @Composable
-private fun ProtocolBody() {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(10.dp),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        TaskTitle()
-        Divider(
-            Modifier.padding(10.dp),
-            thickness = 2.dp
-        )
-        ActionContainer()
-    }
-}
-
-@Composable
 private fun EditButton() {
-    CustomButton(
+    MSquaredButton(
         onClick = {},
         backgroundColor = Color(221, 224, 73)
     ) {
-        CustomImage(
+        MImageContainer(
             imageVectorResource = R.drawable.pencil,
             contentDescriptionResource = R.string.pencil_icon,
             modifier = Modifier.size(25.dp),
@@ -166,217 +158,42 @@ private fun TaskTitle() {
 
 @Composable
 private fun ActionContainer() {
-    val elements by rememberSaveable {
-        mutableStateOf(
-            ActionEntity(
-                "First Element",
-                "First Description"
-            )
-        )
+    var listOfTest by rememberSaveable {
+        mutableStateOf(mutableListOf<ProtocolTask>())
     }
 
-    val secondElement = ActionEntity("Second Element", "Second Description")
-    elements.decisionYes = secondElement
-    val thirdElement = ActionEntity("Third Element", "Third Description")
-    secondElement.decisionYes = thirdElement
-    val fourthElement = ActionEntity("Fourth Element", "Fourth Element")
-    thirdElement.decisionNo = fourthElement
+    listOfTest.add(
+        ProtocolTask(
+            "Testing with the title",
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum ex lorem, non malesuada lectus dignissim sit amet. Praesent aliquet ante sit amet pellentesque tincidunt. Fusce interdum mi sem, ultricies imperdiet tellus auctor ut. Nunc volutpat mi tellus.",
+        )
+    )
 
     LazyColumn(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        fun displayActionTree(node: ActionEntity, level: Int = 0) {
+        listOfTest.forEach { currentEntity ->
             item {
-                ActionItem(
-                    Modifier.padding(start = level.dp),
-                    node
+                LazyActionItem(
+                    entity = currentEntity,
+                    modifier = Modifier.padding(top = 1.dp),
+                    onYesClicked = {
+                        Log.i("Test", "Adding new element ${listOfTest.size}")
+                        listOfTest.add(
+                            currentEntity
+                        )
+                    },
+                    onNoClicked = {
+
+                    },
                 )
             }
 
             item {
-                DecisionItem(
-                    Modifier.padding(start = level.dp),
-                    Decision.YES
-                )
-            }
-
-            node.decisionYes?.let {
-                displayActionTree(it, level + 30)
-            } ?: run {
-                item {
-                    NullItem(
-                        Modifier.padding(start = level.dp),
-                    )
-                }
-            }
-
-
-            item {
-                DecisionItem(
-                    Modifier.padding(start = level.dp),
-                    Decision.NO
-                )
-            }
-
-            node.decisionNo?.let {
-                displayActionTree(it, level + 30)
-            } ?: run {
-                item {
-                    NullItem(
-                        Modifier.padding(start = level.dp),
-                    )
-                }
+                LazyActionItemEdit()
             }
         }
-
-        displayActionTree(elements)
-    }
-}
-
-@Composable
-fun SingleElement(
-    entity: ActionEntity,
-    modifier: Modifier = Modifier,
-) {
-    var isExpanded by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    Column {
-        Card(
-            shape = RoundedCornerShape(10.dp),
-            backgroundColor = Color.White,
-            elevation = 5.dp,
-        ) {
-            Column(
-                modifier = Modifier.padding(10.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    CustomImage(
-                        imageVectorResource = R.drawable.minimize,
-                        contentDescriptionResource = R.string.minimize_icon,
-                        modifier = Modifier.size(30.dp)
-                    )
-                }
-
-                Text(
-                    text = entity.name,
-                    fontFamily = interFamily,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(3, 4, 94),
-                    fontSize = 20.sp,
-                    textAlign = TextAlign.Justify
-                )
-
-                Text(
-                    text = entity.description,
-                    fontFamily = interFamily,
-                    fontWeight = FontWeight.Normal,
-                    color = Color(3, 4, 94),
-                    fontSize = 14.sp,
-                    textAlign = TextAlign.Justify
-                )
-
-                Text(
-                    text = stringResource(id = R.string.actions),
-                    fontFamily = interFamily,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(3, 4, 94),
-                    fontSize = 18.sp,
-                    textAlign = TextAlign.Justify
-                )
-
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Button(
-                        modifier = Modifier
-                            .height(50.dp)
-                            .weight(5f),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(221, 224, 73),
-                        ),
-                        shape = RoundedCornerShape(30.dp),
-                        onClick = {
-
-                        },
-                    ) {
-                        Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                            Text(
-                                text = "Yes:",
-                                fontFamily = interFamily,
-                                fontWeight = FontWeight.Bold,
-                                color = Color(3, 4, 94),
-                                fontSize = 14.sp,
-                            )
-                            Text(
-                                text = "Not assigned",
-                                fontFamily = interFamily,
-                                fontWeight = FontWeight.Normal,
-                                color = Color(3, 4, 94),
-                                fontSize = 14.sp,
-                            )
-
-                        }
-                    }
-
-                    Button(
-                        modifier = Modifier
-                            .height(50.dp)
-                            .weight(5f),
-                        colors = ButtonDefaults.buttonColors(
-                            backgroundColor = Color(224, 73, 106),
-                        ),
-                        shape = RoundedCornerShape(30.dp),
-                        onClick = {
-
-                        },
-                    ) {
-                        Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
-                            Text(
-                                text = "No:",
-                                fontFamily = interFamily,
-                                fontWeight = FontWeight.Bold,
-                                color = Color.White,
-                                fontSize = 14.sp,
-                            )
-
-                            Text(
-                                text = "Assigned",
-                                fontFamily = interFamily,
-                                fontWeight = FontWeight.Normal,
-                                color = Color.White,
-                                fontSize = 14.sp,
-                            )
-
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Preview(
-    device = Devices.NEXUS_6,
-    showSystemUi = true
-)
-@Composable
-fun TestPreview() {
-    Column(
-        Modifier.fillMaxSize()
-    ) {
-        SingleElement(
-            ActionEntity(
-                "Testing with the title",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum ex lorem, non malesuada lectus dignissim sit amet. Praesent aliquet ante sit amet pellentesque tincidunt. Fusce interdum mi sem, ultricies imperdiet tellus auctor ut. Nunc volutpat mi tellus.",
-            )
-        )
     }
 }
 
