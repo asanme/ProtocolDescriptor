@@ -23,9 +23,10 @@ import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
 import com.asanme.protocoldescriptor.model.entity.ProtocolTask
 import com.asanme.protocoldescriptor.ui.component.*
+import com.asanme.protocoldescriptor.viewmodel.ProtocolViewModel
 
 @Composable
-fun AddProtocolView() {
+fun AddProtocolView(protocolViewModel: ProtocolViewModel) {
     Column(
         Modifier
             .fillMaxSize()
@@ -33,7 +34,7 @@ fun AddProtocolView() {
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         ProtocolHeader()
-        ProtocolBody()
+        ProtocolBody(protocolViewModel)
     }
 }
 
@@ -44,10 +45,10 @@ fun ProtocolHeader() {
 }
 
 @Composable
-private fun ProtocolBody() {
+private fun ProtocolBody(protocolViewModel: ProtocolViewModel) {
     TaskTitle()
     Divider(thickness = 2.dp)
-    ActionContainer()
+    ActionContainer(protocolViewModel)
 }
 
 @Composable
@@ -59,8 +60,7 @@ private fun TopControls() {
         Box(Modifier.weight(2f)) {
             MSquaredButton(
                 onClick = {
-
-                },
+                          },
             ) {
                 MImageContainer(
                     imageVectorResource = R.drawable.arrow,
@@ -157,23 +157,13 @@ private fun TaskTitle() {
 }
 
 @Composable
-private fun ActionContainer() {
-    var listOfTest by rememberSaveable {
-        mutableStateOf(mutableListOf<ProtocolTask>())
-    }
-
-    listOfTest.add(
-        ProtocolTask(
-            "Testing with the title",
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum ex lorem, non malesuada lectus dignissim sit amet. Praesent aliquet ante sit amet pellentesque tincidunt. Fusce interdum mi sem, ultricies imperdiet tellus auctor ut. Nunc volutpat mi tellus.",
-        )
-    )
-
+private fun ActionContainer(protocolViewModel: ProtocolViewModel) {
+    val currentList by protocolViewModel.currentItems.
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        listOfTest.forEach { currentEntity ->
+        .forEach { currentEntity ->
             item {
                 LazyActionItem(
                     entity = currentEntity,
@@ -203,5 +193,5 @@ private fun ActionContainer() {
 )
 @Composable
 fun PreviewAddProtocol() {
-    AddProtocolView()
+    AddProtocolView(ProtocolViewModel())
 }
