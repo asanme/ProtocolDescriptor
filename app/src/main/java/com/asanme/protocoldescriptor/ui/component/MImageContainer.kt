@@ -21,6 +21,6 @@ fun MImageContainer(
         imageVector = ImageVector.vectorResource(id = imageVectorResource),
         contentDescription = stringResource(id = contentDescriptionResource),
         modifier = modifier,
-        contentScale = contentScale
+        contentScale = contentScale,
     )
 }

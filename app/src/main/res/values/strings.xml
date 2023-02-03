@@ -17,4 +17,5 @@
     <string name="minimize_icon">Minimize</string>
     <string name="actions">Actions</string>
     <string name="expand_icon">Expand</string>
+    <string name="search_icon">Search Icon</string>
 </resources>

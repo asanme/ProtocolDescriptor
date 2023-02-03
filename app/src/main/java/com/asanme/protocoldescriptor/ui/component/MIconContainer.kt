@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun MIconContainer(
+    modifier: Modifier = Modifier,
     @DrawableRes imageVectorResource: Int,
     @StringRes contentDescriptionResource: Int,
     iconColor: Color = Color(3, 4, 94),
@@ -22,6 +23,6 @@ fun MIconContainer(
         ImageVector.vectorResource(id = imageVectorResource),
         contentDescription = stringResource(id = contentDescriptionResource),
         tint = iconColor,
-        modifier = Modifier.padding(start = 10.dp)
+        modifier = modifier.padding(start = 10.dp)
     )
 }

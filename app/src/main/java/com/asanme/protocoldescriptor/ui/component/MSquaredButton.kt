@@ -8,6 +8,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -15,13 +16,14 @@ import androidx.compose.ui.unit.dp
 fun MSquaredButton(
     modifier: Modifier = Modifier,
     buttonSize: Dp = 45.dp,
+    shape: Shape = RoundedCornerShape(10.dp),
     backgroundColor: Color = Color.White,
     onClick: () -> Unit,
     content: @Composable (RowScope) -> Unit,
 ) {
     return Button(
         elevation = ButtonDefaults.elevation(5.dp),
-        shape = RoundedCornerShape(10.dp),
+        shape = shape,
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             backgroundColor = backgroundColor

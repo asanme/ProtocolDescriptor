@@ -1,12 +1,12 @@
 package com.asanme.protocoldescriptor.view
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -60,7 +60,7 @@ private fun TopControls() {
         Box(Modifier.weight(2f)) {
             MSquaredButton(
                 onClick = {
-                          },
+                },
             ) {
                 MImageContainer(
                     imageVectorResource = R.drawable.arrow,
@@ -102,8 +102,8 @@ private fun ProtocolFields() {
         },
         leadingIcon = {
             MIconContainer(
-                R.drawable.protocol_icon,
-                R.string.protocol_icon
+                imageVectorResource = R.drawable.protocol_icon,
+                contentDescriptionResource = R.string.protocol_icon
             )
         },
         text = protocolText,
@@ -119,8 +119,8 @@ private fun ProtocolFields() {
         },
         leadingIcon = {
             MIconContainer(
-                R.drawable.acronym_icon,
-                R.string.acronym_icon
+                imageVectorResource = R.drawable.acronym_icon,
+                contentDescriptionResource = R.string.acronym_icon
             )
         },
         text = acronymText,
@@ -158,32 +158,39 @@ private fun TaskTitle() {
 
 @Composable
 private fun ActionContainer(protocolViewModel: ProtocolViewModel) {
-    val currentList by protocolViewModel.currentItems.
+    val currentTasks by protocolViewModel.currentTasks.observeAsState(
+        ProtocolTask(
+            "First Element",
+            "Basic Description"
+        )
+    )
+
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        .forEach { currentEntity ->
+        fun displayActionTree(currentTask: ProtocolTask) {
             item {
                 LazyActionItem(
-                    entity = currentEntity,
-                    modifier = Modifier.padding(top = 1.dp),
+                    modifier = Modifier.padding(top = 5.dp),
+                    entity = currentTask,
                     onYesClicked = {
-                        Log.i("Test", "Adding new element ${listOfTest.size}")
-                        listOfTest.add(
-                            currentEntity
-                        )
                     },
                     onNoClicked = {
-
-                    },
+                    }
                 )
             }
 
-            item {
-                LazyActionItemEdit()
+            currentTask.decisionYes?.let {
+                displayActionTree(it)
+            }
+
+            currentTask.decisionNo?.let {
+                displayActionTree(it)
             }
         }
+
+        displayActionTree(currentTasks)
     }
 }
 

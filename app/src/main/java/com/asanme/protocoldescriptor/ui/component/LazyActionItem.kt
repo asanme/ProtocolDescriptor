@@ -118,7 +118,6 @@ fun LazyActionItemEdit(
     }
 }
 
-
 @Composable
 fun LazyActionItem(
     entity: ProtocolTask,
@@ -134,11 +133,11 @@ fun LazyActionItem(
         shape = RoundedCornerShape(10.dp),
         backgroundColor = Color.White,
         elevation = 5.dp,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Column(
             modifier = Modifier.padding(10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Row(
                 Modifier.fillMaxWidth(),
@@ -276,7 +275,7 @@ fun TestPreview() {
         LazyActionItem(
             ProtocolTask(
                 "Testing with the title",
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer rutrum ex lorem, non malesuada lectus dignissim sit amet. Praesent aliquet ante sit amet pellentesque tincidunt. Fusce interdum mi sem, ultricies imperdiet tellus auctor ut. Nunc volutpat mi tellus.",
+                "Lorem ipsum dolor sit amet, "
             ),
             onYesClicked = {},
             onNoClicked = {}

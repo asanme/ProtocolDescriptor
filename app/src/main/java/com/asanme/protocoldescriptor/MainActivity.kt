@@ -9,6 +9,7 @@ import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
 import com.asanme.protocoldescriptor.ui.theme.ProtocolDescriptorTheme
 import com.asanme.protocoldescriptor.view.AddProtocolView
+import com.asanme.protocoldescriptor.view.TopicsView
 import com.asanme.protocoldescriptor.viewmodel.ProtocolViewModel
 
 class MainActivity : ComponentActivity() {
@@ -20,7 +21,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    AddProtocolView(ProtocolViewModel())
+                    //AddProtocolView(ProtocolViewModel())
+                    TopicsView()
                 }
             }
         }
