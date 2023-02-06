@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.asanme.protocoldescriptor.R
 
@@ -25,8 +26,8 @@ fun AddNewElementButton() {
             .fillMaxWidth()
             .padding(4.dp),
     ) {
-
         Box(modifier = Modifier.weight(5f))
+
         Text(
             "Add new topic",
             color = Color.White,
@@ -52,4 +53,12 @@ fun AddNewElementButton() {
             }
         }
     }
+}
+
+@Preview(
+    name = "TopicsView",
+)
+@Composable
+fun Testing() {
+    AddNewElementButton()
 }
