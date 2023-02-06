@@ -11,5 +11,3 @@ data class ProtocolTask(
     var decisionYes: ProtocolTask? = null,
     var decisionNo: ProtocolTask? = null
 ) : Parcelable
-
-

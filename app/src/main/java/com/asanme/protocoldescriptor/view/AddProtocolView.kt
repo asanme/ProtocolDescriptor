@@ -171,6 +171,11 @@ private fun ActionContainer(protocolViewModel: ProtocolViewModel) {
     ) {
         fun displayActionTree(currentTask: ProtocolTask) {
             item {
+                LazyActionItemEdit()
+            }
+
+
+            item {
                 LazyActionItem(
                     modifier = Modifier.padding(top = 5.dp),
                     entity = currentTask,

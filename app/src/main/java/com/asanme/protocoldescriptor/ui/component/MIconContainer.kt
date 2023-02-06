@@ -23,6 +23,6 @@ fun MIconContainer(
         ImageVector.vectorResource(id = imageVectorResource),
         contentDescription = stringResource(id = contentDescriptionResource),
         tint = iconColor,
-        modifier = modifier.padding(start = 10.dp)
+        modifier = modifier
     )
 }

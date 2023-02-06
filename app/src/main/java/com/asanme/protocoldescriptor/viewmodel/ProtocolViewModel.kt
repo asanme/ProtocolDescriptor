@@ -9,4 +9,8 @@ import com.asanme.protocoldescriptor.model.enum.Decision
 class ProtocolViewModel : ViewModel() {
     private val _currentTasks = MutableLiveData<ProtocolTask>()
     val currentTasks: LiveData<ProtocolTask> = _currentTasks
+
+    fun AddNewTask() {
+
+    }
 }

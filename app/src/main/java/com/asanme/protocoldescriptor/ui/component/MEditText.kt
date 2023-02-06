@@ -19,7 +19,9 @@ fun MEditText(
     text: String,
     singleLine: Boolean = false,
     backgroundColor: Color = Color.White,
-    cornerShape: Dp = 25.dp
+    cornerShape: Dp = 25.dp,
+    textColor: Color = Color(3, 4, 94),
+    cursorColor: Color = Color.Black,
 ) {
     Card(
         elevation = 5.dp,
@@ -30,12 +32,12 @@ fun MEditText(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(cornerShape),
             colors = TextFieldDefaults.textFieldColors(
-                textColor = Color(3, 4, 94),
                 backgroundColor = backgroundColor,
                 unfocusedIndicatorColor = Color.Transparent,
                 focusedIndicatorColor = Color.Transparent,
-                cursorColor = Color.Black,
                 trailingIconColor = Color(3, 4, 94),
+                cursorColor = cursorColor,
+                textColor =  textColor,
             ),
             label = label,
             leadingIcon = leadingIcon,
