@@ -37,7 +37,7 @@ fun MEditText(
                 focusedIndicatorColor = Color.Transparent,
                 trailingIconColor = Color(3, 4, 94),
                 cursorColor = cursorColor,
-                textColor =  textColor,
+                textColor = textColor,
             ),
             label = label,
             leadingIcon = leadingIcon,

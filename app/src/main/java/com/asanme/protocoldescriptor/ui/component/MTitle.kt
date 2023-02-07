@@ -13,13 +13,14 @@ import com.asanme.protocoldescriptor.fonts.interFamily
 fun CustomTitle(
     text: String,
     fontSize: TextUnit = 36.sp,
+    color: Color = Color(0xFF032F54),
 ) {
     Text(
         text = text,
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold,
         fontSize = fontSize,
-        color = Color(0xFF032F54),
+        color = color,
         fontFamily = interFamily
     )
 }

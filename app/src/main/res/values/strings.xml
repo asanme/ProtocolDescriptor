@@ -19,4 +19,11 @@
     <string name="expand_icon">Expand</string>
     <string name="search_icon">Search Icon</string>
     <string name="search">Search</string>
+    <string name="topic">Topic name</string>
+    <string name="brush_icon">Brush Icon</string>
+    <string name="message_icon">Message Icon</string>
+    <string name="icon">Icon</string>
+    <string name="new_topic">Add new topic</string>
+    <string name="topic_icon">Topic Icon</string>
+    <string name="close_icon">Close Icon</string>
 </resources>

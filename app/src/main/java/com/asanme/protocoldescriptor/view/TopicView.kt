@@ -1,6 +1,5 @@
 package com.asanme.protocoldescriptor.view
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -20,9 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.asanme.protocoldescriptor.model.enum.Routes
-import com.asanme.protocoldescriptor.ui.component.AddNewElementButton
 import com.asanme.protocoldescriptor.ui.component.CustomSearchBar
 import com.asanme.protocoldescriptor.ui.component.CustomTitle
+import com.asanme.protocoldescriptor.ui.component.NewTopicMenu
 import com.asanme.protocoldescriptor.ui.component.TopicLazyItem
 import com.asanme.protocoldescriptor.viewmodel.TopicViewModel
 
@@ -75,7 +74,11 @@ fun TopicsBody(navController: NavHostController?, topicViewModel: TopicViewModel
             }
         }
 
-        AddNewElementButton()
+        NewTopicMenu(
+            onTopicAdd = {
+                topicViewModel.addNewItem(it)
+            }
+        )
     }
 }
 

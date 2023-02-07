@@ -1,7 +1,6 @@
 package com.asanme.protocoldescriptor.model.entity
 
 import android.os.Parcelable
-import com.asanme.protocoldescriptor.model.enum.Decision
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
