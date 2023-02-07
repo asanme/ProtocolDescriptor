@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,7 @@ fun TopicLazyItem(
         backgroundColor = Color.White,
         elevation = 5.dp,
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .clickable(onClick = onItemClicked)
             .padding(vertical = 5.dp),
     ) {
@@ -45,7 +46,8 @@ fun TopicLazyItem(
             Text(
                 text = titleString,
                 fontSize = 24.sp,
-                color = Color(0xFF03045E)
+                color = Color(0xFF03045E),
+                textAlign = TextAlign.Center
             )
         }
     }

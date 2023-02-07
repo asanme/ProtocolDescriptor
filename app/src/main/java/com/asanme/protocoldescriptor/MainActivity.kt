@@ -16,6 +16,7 @@ import com.asanme.protocoldescriptor.ui.theme.ProtocolDescriptorTheme
 import com.asanme.protocoldescriptor.view.AddProtocolView
 import com.asanme.protocoldescriptor.view.TopicsView
 import com.asanme.protocoldescriptor.viewmodel.ProtocolViewModel
+import com.asanme.protocoldescriptor.viewmodel.TopicViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +39,7 @@ fun App() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Routes.TopicView.route) {
         composable(Routes.TopicView.route) {
-            TopicsView(navController)
+            TopicsView(navController, TopicViewModel())
         }
 
         composable(Routes.AddProtocolView.route) {
