@@ -28,9 +28,7 @@ import com.asanme.protocoldescriptor.model.entity.ProtocolTask
 
 @Composable
 
-fun LazyActionItemEdit(
-    modifier: Modifier = Modifier,
-) {
+fun ActionItem() {
     var actionText by rememberSaveable {
         mutableStateOf("")
     }
@@ -261,7 +259,7 @@ fun LazyActionItem(
 @Composable
 fun TestEditAction() {
     Column(Modifier.fillMaxSize()) {
-        LazyActionItemEdit()
+        ActionItem()
     }
 }
 

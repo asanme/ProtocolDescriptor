@@ -6,7 +6,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -23,32 +22,31 @@ import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
 import com.asanme.protocoldescriptor.model.entity.ProtocolTask
 import com.asanme.protocoldescriptor.ui.component.*
-import com.asanme.protocoldescriptor.viewmodel.ProtocolViewModel
 
 @Composable
-fun AddProtocolView(protocolViewModel: ProtocolViewModel) {
+fun AddProtocolView() {
     Column(
         Modifier
             .fillMaxSize()
             .padding(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        ProtocolHeader()
-        ProtocolBody(protocolViewModel)
+        AddNewProtocolHeader()
+        ProtocolBody()
     }
 }
 
 @Composable
-fun ProtocolHeader() {
+fun AddNewProtocolHeader() {
     TopControls()
     ProtocolFields()
 }
 
 @Composable
-private fun ProtocolBody(protocolViewModel: ProtocolViewModel) {
+private fun ProtocolBody() {
     TaskTitle()
     Divider(thickness = 2.dp)
-    ActionContainer(protocolViewModel)
+    ActionContainer()
 }
 
 @Composable
@@ -157,12 +155,10 @@ private fun TaskTitle() {
 }
 
 @Composable
-private fun ActionContainer(protocolViewModel: ProtocolViewModel) {
-    val currentTasks by protocolViewModel.currentTasks.observeAsState(
-        ProtocolTask(
-            "First Element",
-            "Basic Description"
-        )
+private fun ActionContainer() {
+    val currentTasks = ProtocolTask(
+        "First Element",
+        "Basic Description"
     )
 
     LazyColumn(
@@ -171,9 +167,8 @@ private fun ActionContainer(protocolViewModel: ProtocolViewModel) {
     ) {
         fun displayActionTree(currentTask: ProtocolTask) {
             item {
-                LazyActionItemEdit()
+                ActionItem()
             }
-
 
             item {
                 LazyActionItem(
@@ -205,5 +200,5 @@ private fun ActionContainer(protocolViewModel: ProtocolViewModel) {
 )
 @Composable
 fun PreviewAddProtocol() {
-    AddProtocolView(ProtocolViewModel())
+    AddProtocolView()
 }

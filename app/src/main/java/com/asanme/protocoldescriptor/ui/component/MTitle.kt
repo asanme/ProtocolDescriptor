@@ -12,7 +12,7 @@ import com.asanme.protocoldescriptor.fonts.interFamily
 @Composable
 fun CustomTitle(
     text: String,
-    fontSize: TextUnit = 36.sp,
+    fontSize: TextUnit = 34.sp,
     color: Color = Color(0xFF032F54),
 ) {
     Text(

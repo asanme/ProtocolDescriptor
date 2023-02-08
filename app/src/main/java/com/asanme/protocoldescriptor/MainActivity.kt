@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.asanme.protocoldescriptor.model.enum.Routes
 import com.asanme.protocoldescriptor.ui.theme.ProtocolDescriptorTheme
 import com.asanme.protocoldescriptor.view.AddProtocolView
+import com.asanme.protocoldescriptor.view.ProtocolView
 import com.asanme.protocoldescriptor.view.TopicsView
 import com.asanme.protocoldescriptor.viewmodel.ProtocolViewModel
 import com.asanme.protocoldescriptor.viewmodel.TopicViewModel
@@ -43,7 +44,13 @@ fun App() {
         }
 
         composable(Routes.AddProtocolView.route) {
-            AddProtocolView(ProtocolViewModel())
+            AddProtocolView()
+        }
+
+        composable("${Routes.ProtocolView.route}/{topicId}") { backStackEntry ->
+            backStackEntry.arguments?.getString("topicId")?.let { topicId ->
+                ProtocolView(navController, ProtocolViewModel(), topicId)
+            }
         }
     }
 }

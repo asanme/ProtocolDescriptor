@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -17,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import com.asanme.protocoldescriptor.model.enum.Routes
 import com.asanme.protocoldescriptor.ui.component.CustomSearchBar
@@ -69,7 +67,7 @@ fun TopicsBody(navController: NavHostController?, topicViewModel: TopicViewModel
                 TopicLazyItem(
                     currentItem,
                     onItemClicked = {
-                        navController?.navigate(Routes.AddProtocolView.route)
+                        navController?.navigate("${Routes.ProtocolView.route}/$currentItem")
                     }
                 )
             }

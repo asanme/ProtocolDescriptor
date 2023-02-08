@@ -28,7 +28,7 @@ import com.asanme.protocoldescriptor.fonts.interFamily
 fun NewTopicMenu(
     onTopicAdd: (String) -> Unit
 ) {
-    var isMenuShown by rememberSaveable { mutableStateOf(true) }
+    var isMenuShown by rememberSaveable { mutableStateOf(false) }
     var topicText by rememberSaveable { mutableStateOf("") }
 
     if (!isMenuShown) {
@@ -184,7 +184,5 @@ fun NewTopicMenu(
 )
 @Composable
 fun Testing() {
-    NewTopicMenu({
-
-    })
+    NewTopicMenu(onTopicAdd = {})
 }
