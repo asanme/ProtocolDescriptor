@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import com.asanme.protocoldescriptor.model.enum.Routes
 import com.asanme.protocoldescriptor.ui.component.CustomSearchBar
@@ -44,7 +45,7 @@ fun TopicsHeader() {
 
 @Composable
 fun TopicsBody(navController: NavHostController?, topicViewModel: TopicViewModel) {
-    val topics by topicViewModel.listOfTopics.observeAsState(emptyList())
+    val topics = topicViewModel.listOfTopics
     var searchString by rememberSaveable { mutableStateOf("") }
 
     CustomSearchBar(
