@@ -30,7 +30,10 @@ fun TopicLazyItem(
         modifier = Modifier
             .fillMaxSize()
             .clickable(onClick = onItemClicked)
-            .padding(vertical = 5.dp),
+            .padding(
+                top = 5.dp,
+                bottom = 12.dp
+            ),
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -26,4 +26,6 @@
     <string name="new_topic">Add new topic</string>
     <string name="topic_icon">Topic Icon</string>
     <string name="close_icon">Close Icon</string>
+    <string name="no_acronym_label">No acronym</string>
+    <string name="name_label">Name</string>
 </resources>

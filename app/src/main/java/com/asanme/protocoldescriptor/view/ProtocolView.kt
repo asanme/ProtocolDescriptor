@@ -30,13 +30,16 @@ fun ProtocolView(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.padding(10.dp)
     ) {
-        ProtocolHeader(topicId)
+        ProtocolHeader(navController, topicId)
         ProtocolBody(navController, topicViewModel)
     }
 }
 
 @Composable
-fun ProtocolHeader(title: String) {
+fun ProtocolHeader(
+    navController: NavHostController?,
+    title: String
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
@@ -44,6 +47,7 @@ fun ProtocolHeader(title: String) {
         Box(Modifier.weight(2f)) {
             MSquaredButton(
                 onClick = {
+                    navController?.navigateUp()
                 },
             ) {
                 MImageContainer(
@@ -65,7 +69,10 @@ fun ProtocolHeader(title: String) {
 }
 
 @Composable
-fun ProtocolBody(navController: NavHostController?, topicViewModel: ProtocolViewModel) {
+fun ProtocolBody(
+    navController: NavHostController?,
+    topicViewModel: ProtocolViewModel
+) {
     val topics = topicViewModel.listOfProtocols
     var searchString by rememberSaveable { mutableStateOf("") }
 
@@ -78,7 +85,6 @@ fun ProtocolBody(navController: NavHostController?, topicViewModel: ProtocolView
 
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         items(
             topics.filter { topic ->
@@ -91,8 +97,6 @@ fun ProtocolBody(navController: NavHostController?, topicViewModel: ProtocolView
             ProtocolDescriptionItem(currentItem)
         }
     }
-
-
 }
 
 @Preview(
@@ -107,7 +111,7 @@ fun ProtocolViewPreview() {
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.padding(10.dp)
     ) {
-        ProtocolHeader("Testing")
+        ProtocolHeader(null, "Testing")
         ProtocolBody(null, ProtocolViewModel())
     }
 }
