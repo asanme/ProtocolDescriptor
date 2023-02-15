@@ -1,7 +1,7 @@
 package com.asanme.protocoldescriptor.model.enum
 
-enum class Decision(val text: String) {
-    YES("YES"),
-    NO("NO"),
-    NONE("EMPTY")
+sealed class Decision(val type: String) {
+    object Yes : Decision("yes")
+    object No : Decision("no")
+    object None : Decision("none")
 }

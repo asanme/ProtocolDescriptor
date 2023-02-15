@@ -6,11 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
@@ -23,6 +20,8 @@ import com.asanme.protocoldescriptor.ui.component.CustomTitle
 import com.asanme.protocoldescriptor.ui.component.NewTopicMenu
 import com.asanme.protocoldescriptor.ui.component.TopicLazyItem
 import com.asanme.protocoldescriptor.viewmodel.TopicViewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun TopicsView(navController: NavHostController, topicViewModel: TopicViewModel) {
@@ -74,9 +73,7 @@ fun TopicsBody(navController: NavHostController?, topicViewModel: TopicViewModel
         }
 
         NewTopicMenu(
-            onTopicAdd = {
-                topicViewModel.addNewItem(it)
-            }
+            onTopicAdd = { }
         )
     }
 }
