@@ -3,15 +3,10 @@ package com.asanme.protocoldescriptor.view
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -22,24 +17,25 @@ import com.asanme.protocoldescriptor.viewmodel.ProtocolViewModel
 @Composable
 fun ProtocolView(
     navController: NavHostController,
-    topicViewModel: ProtocolViewModel,
-    topicId: String
+    protocolViewModel: ProtocolViewModel,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.padding(10.dp)
     ) {
-        ProtocolHeader(navController, topicId)
-        ProtocolBody(navController, topicViewModel)
+        ProtocolHeader(navController, protocolViewModel)
+        ProtocolBody(navController, protocolViewModel)
     }
 }
 
 @Composable
 fun ProtocolHeader(
-    navController: NavHostController?,
-    title: String
+    navController: NavHostController,
+    protocolViewModel: ProtocolViewModel
 ) {
+    val title by protocolViewModel.topic.collectAsState()
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
@@ -47,7 +43,7 @@ fun ProtocolHeader(
         Box(Modifier.weight(2f)) {
             MSquaredButton(
                 onClick = {
-                    navController?.navigateUp()
+                    navController.navigateUp()
                 },
             ) {
                 MImageContainer(
@@ -61,7 +57,7 @@ fun ProtocolHeader(
             Modifier.weight(5f),
             contentAlignment = Alignment.Center
         ) {
-            CustomTitle(title, fontSize = 24.sp)
+            CustomTitle(title.name, fontSize = 24.sp)
         }
 
         Box(Modifier.weight(2f))
@@ -70,10 +66,10 @@ fun ProtocolHeader(
 
 @Composable
 fun ProtocolBody(
-    navController: NavHostController?,
-    topicViewModel: ProtocolViewModel
+    navController: NavHostController,
+    protocolViewModel: ProtocolViewModel
 ) {
-    val topics = topicViewModel.listOfProtocols
+    val activities by protocolViewModel.activities.collectAsState()
     var searchString by rememberSaveable { mutableStateOf("") }
 
     CustomSearchBar(
@@ -87,8 +83,8 @@ fun ProtocolBody(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         items(
-            topics.filter { topic ->
-                topic.name.contains(searchString, true) || topic.acronym.contains(
+            activities.filter { protocol ->
+                protocol.name.contains(searchString, true) || protocol.acronym.contains(
                     searchString,
                     true
                 )
@@ -96,22 +92,5 @@ fun ProtocolBody(
         ) { currentItem ->
             ProtocolDescriptionItem(currentItem)
         }
-    }
-}
-
-@Preview(
-    name = "ProtocolView",
-    showSystemUi = true,
-    device = Devices.NEXUS_6
-)
-@Composable
-fun ProtocolViewPreview() {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(10.dp),
-        modifier = Modifier.padding(10.dp)
-    ) {
-        ProtocolHeader(null, "Testing")
-        ProtocolBody(null, ProtocolViewModel())
     }
 }

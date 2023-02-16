@@ -11,7 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.asanme.protocoldescriptor.model.RetrofitAPI
 import com.asanme.protocoldescriptor.model.enum.Routes
+import com.asanme.protocoldescriptor.model.helper.RetrofitHelper
 import com.asanme.protocoldescriptor.ui.theme.ProtocolDescriptorTheme
 import com.asanme.protocoldescriptor.view.AddProtocolView
 import com.asanme.protocoldescriptor.view.ProtocolView
@@ -40,7 +42,11 @@ fun App() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Routes.TopicView.route) {
         composable(Routes.TopicView.route) {
-            TopicsView(navController, TopicViewModel())
+            TopicsView(
+                navController, TopicViewModel(
+                    RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
+                )
+            )
         }
 
         composable(Routes.AddProtocolView.route) {
@@ -49,7 +55,13 @@ fun App() {
 
         composable("${Routes.ProtocolView.route}/{topicId}") { backStackEntry ->
             backStackEntry.arguments?.getString("topicId")?.let { topicId ->
-                ProtocolView(navController, ProtocolViewModel(), topicId)
+                ProtocolView(
+                    navController,
+                    ProtocolViewModel(
+                        topicId,
+                        RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
+                    ),
+                )
             }
         }
     }

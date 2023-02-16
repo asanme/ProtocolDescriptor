@@ -7,7 +7,9 @@ object RetrofitHelper {
     val baseUrl = "http://10.0.2.2:4000"
 
     fun getInstance(): Retrofit {
-        return Retrofit.Builder().baseUrl(baseUrl)
+        return Retrofit
+            .Builder()
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

@@ -13,15 +13,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.*
 import androidx.navigation.NavHostController
+import com.asanme.protocoldescriptor.model.RetrofitAPI
 import com.asanme.protocoldescriptor.model.enum.Routes
+import com.asanme.protocoldescriptor.model.helper.RetrofitHelper
 import com.asanme.protocoldescriptor.ui.component.CustomSearchBar
 import com.asanme.protocoldescriptor.ui.component.CustomTitle
 import com.asanme.protocoldescriptor.ui.component.NewTopicMenu
 import com.asanme.protocoldescriptor.ui.component.TopicLazyItem
 import com.asanme.protocoldescriptor.viewmodel.TopicViewModel
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.coroutineScope
 
 @Composable
 fun TopicsView(navController: NavHostController, topicViewModel: TopicViewModel) {
@@ -42,7 +44,7 @@ fun TopicsHeader() {
 
 @Composable
 fun TopicsBody(navController: NavHostController?, topicViewModel: TopicViewModel) {
-    val topics = topicViewModel.listOfTopics
+    val topics = topicViewModel.topics.collectAsState()
     var searchString by rememberSaveable { mutableStateOf("") }
 
     CustomSearchBar(
@@ -59,14 +61,14 @@ fun TopicsBody(navController: NavHostController?, topicViewModel: TopicViewModel
             modifier = Modifier.weight(1f),
         ) {
             items(
-                topics.filter { topic ->
-                    topic.contains(searchString, true)
+                topics.value.filter { topic ->
+                    topic.name.contains(searchString, true)
                 }
             ) { currentItem ->
                 TopicLazyItem(
-                    currentItem,
+                    currentItem.name,
                     onItemClicked = {
-                        navController?.navigate("${Routes.ProtocolView.route}/$currentItem")
+                        navController?.navigate("${Routes.ProtocolView.route}/${currentItem._id}")
                     }
                 )
             }
@@ -91,6 +93,11 @@ fun TopicsPreview() {
         modifier = Modifier.padding(10.dp)
     ) {
         TopicsHeader()
-        TopicsBody(null, TopicViewModel())
+        TopicsBody(
+            null,
+            TopicViewModel(
+                RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
+            )
+        )
     }
 }

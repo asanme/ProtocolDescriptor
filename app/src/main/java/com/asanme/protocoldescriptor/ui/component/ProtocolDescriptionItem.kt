@@ -10,15 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.asanme.protocoldescriptor.fonts.interFamily
-import com.asanme.protocoldescriptor.model.entity.ProtocolDescription
 import com.asanme.protocoldescriptor.R
+import com.asanme.protocoldescriptor.fonts.interFamily
+import com.asanme.protocoldescriptor.model.entity.Activity
 
 @Composable
-fun ProtocolDescriptionItem(item: ProtocolDescription) {
+fun ProtocolDescriptionItem(item: Activity) {
     Card(
         elevation = 5.dp,
         shape = RoundedCornerShape(10.dp),
@@ -81,10 +80,4 @@ fun ProtocolDescriptionItem(item: ProtocolDescription) {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewProtocolDescriptionItem() {
-    ProtocolDescriptionItem(ProtocolDescription("Testing"))
 }
