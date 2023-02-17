@@ -15,9 +15,10 @@ import androidx.compose.ui.unit.sp
 import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
 import com.asanme.protocoldescriptor.model.entity.Activity
+import com.asanme.protocoldescriptor.model.entity.Checklist
 
 @Composable
-fun ProtocolDescriptionItem(item: Activity) {
+fun ProtocolDescriptionItem(item: Checklist) {
     Card(
         elevation = 5.dp,
         shape = RoundedCornerShape(10.dp),
@@ -50,7 +51,7 @@ fun ProtocolDescriptionItem(item: Activity) {
                     fontSize = 20.sp
                 )
             }
-
+            /*
             Row {
                 Text(
                     stringResource(R.string.acronym_label) + ": ",
@@ -78,6 +79,7 @@ fun ProtocolDescriptionItem(item: Activity) {
                     )
                 }
             }
+             */
         }
     }
 }

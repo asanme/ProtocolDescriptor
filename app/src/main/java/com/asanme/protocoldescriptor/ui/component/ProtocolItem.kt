@@ -28,7 +28,7 @@ import com.asanme.protocoldescriptor.model.entity.ProtocolTask
 
 @Composable
 
-fun ActionItem() {
+fun ProtocolItem() {
     var actionText by rememberSaveable {
         mutableStateOf("")
     }
@@ -117,7 +117,7 @@ fun ActionItem() {
 }
 
 @Composable
-fun LazyActionItem(
+fun ProtocolListElement(
     entity: ProtocolTask,
     modifier: Modifier = Modifier,
     onYesClicked: () -> Unit,
@@ -259,7 +259,7 @@ fun LazyActionItem(
 @Composable
 fun TestEditAction() {
     Column(Modifier.fillMaxSize()) {
-        ActionItem()
+        ProtocolItem()
     }
 }
 
@@ -270,7 +270,7 @@ fun TestEditAction() {
 @Composable
 fun TestPreview() {
     Column(Modifier.fillMaxSize()) {
-        LazyActionItem(
+        ProtocolListElement(
             ProtocolTask(
                 "Testing with the title",
                 "Lorem ipsum dolor sit amet, "

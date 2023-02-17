@@ -1,14 +1,12 @@
 package com.asanme.protocoldescriptor.view
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,39 +16,60 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
-import com.asanme.protocoldescriptor.model.entity.ProtocolTask
+import com.asanme.protocoldescriptor.model.entity.ChecklistTask
 import com.asanme.protocoldescriptor.ui.component.*
+import com.asanme.protocoldescriptor.ui.theme.Pinkish
+import com.asanme.protocoldescriptor.ui.theme.Yellowish
+import com.asanme.protocoldescriptor.viewmodel.ActivityViewModel
 
 @Composable
-fun AddProtocolView() {
+fun AddChecklistView(
+    navController: NavController?,
+    activityViewModel: ActivityViewModel
+) {
+    val topic by activityViewModel.topic.collectAsState()
+    Log.i("ChecklistViewModel", topic._id)
     Column(
         Modifier
             .fillMaxSize()
             .padding(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        AddNewProtocolHeader()
-        ProtocolBody()
+        AddNewChecklistHeader(navController)
+        ChecklistBody()
     }
 }
 
 @Composable
-fun AddNewProtocolHeader() {
-    TopControls()
-    ProtocolFields()
+fun AddNewChecklistHeader(
+    navController: NavController?
+) {
+    TopControls(navController)
+    ChecklistFields()
 }
 
 @Composable
-private fun ProtocolBody() {
-    TaskTitle()
+private fun ChecklistBody() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        TaskTitle()
+        EditButton()
+    }
+
     Divider(thickness = 2.dp)
     ActionContainer()
 }
 
 @Composable
-private fun TopControls() {
+private fun TopControls(
+    navController: NavController?
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
@@ -58,6 +77,7 @@ private fun TopControls() {
         Box(Modifier.weight(2f)) {
             MSquaredButton(
                 onClick = {
+                    navController?.navigateUp()
                 },
             ) {
                 MImageContainer(
@@ -72,7 +92,7 @@ private fun TopControls() {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "Add new protocol",
+                text = stringResource(R.string.add_checklist),
                 fontFamily = interFamily,
                 fontWeight = FontWeight.Normal,
                 color = Color(0xFF03045E),
@@ -80,23 +100,34 @@ private fun TopControls() {
             )
         }
 
-        Box(Modifier.weight(2f))
+        Box(
+            Modifier.weight(2f),
+            contentAlignment = Alignment.CenterEnd
+        ) {
+            MSquaredButton(
+                backgroundColor = Pinkish,
+                onClick = {
+                },
+            ) {
+                MIconContainer(
+                    imageVectorResource = R.drawable.done,
+                    contentDescriptionResource = R.string.done,
+                    iconColor = Color.White
+                )
+            }
+        }
     }
 }
 
 @Composable
-private fun ProtocolFields() {
+private fun ChecklistFields() {
     var protocolText by rememberSaveable {
-        mutableStateOf("")
-    }
-
-    var acronymText by rememberSaveable {
         mutableStateOf("")
     }
 
     MEditText(
         label = {
-            Text(stringResource(id = R.string.protocol_label))
+            Text(stringResource(id = R.string.checklist_name))
         },
         leadingIcon = {
             MIconContainer(
@@ -110,35 +141,37 @@ private fun ProtocolFields() {
             protocolText = newText
         },
     )
+}
 
-    MEditText(
-        label = {
-            Text(stringResource(id = R.string.acronym_label))
+@Composable
+private fun CreateChecklistButton() {
+    MSquaredButton(
+        onClick = {
         },
-        leadingIcon = {
-            MIconContainer(
-                imageVectorResource = R.drawable.acronym_icon,
-                contentDescriptionResource = R.string.acronym_icon
-            )
-        },
-        text = acronymText,
-        singleLine = true,
-        onValueChange = { newText ->
-            acronymText = newText
-        },
-    )
+        backgroundColor = Pinkish
+    ) {
+        MImageContainer(
+            imageVectorResource = R.drawable.add,
+            contentDescriptionResource = R.string.return_arrow
+        )
+    }
 }
 
 @Composable
 private fun EditButton() {
+    var isEditing by rememberSaveable {
+        mutableStateOf(false)
+    }
+
     MSquaredButton(
-        onClick = {},
-        backgroundColor = Color(221, 224, 73)
+        onClick = {
+            isEditing = !isEditing
+        },
+        backgroundColor = Yellowish
     ) {
         MImageContainer(
-            imageVectorResource = R.drawable.pencil,
-            contentDescriptionResource = R.string.pencil_icon,
-            modifier = Modifier.size(25.dp),
+            imageVectorResource = if (!isEditing) R.drawable.pencil else R.drawable.done,
+            contentDescriptionResource = R.string.return_arrow
         )
     }
 }
@@ -156,41 +189,22 @@ private fun TaskTitle() {
 
 @Composable
 private fun ActionContainer() {
-    val currentTasks = ProtocolTask(
+    val currentTasks = ChecklistTask(
         "First Element",
-        "Basic Description"
+        "Basic Description",
+        "pending"
     )
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        fun displayActionTree(currentTask: ProtocolTask) {
-            item {
-                ProtocolItem()
-            }
-
-            item {
-                ProtocolListElement(
-                    modifier = Modifier.padding(top = 5.dp),
-                    entity = currentTask,
-                    onYesClicked = {
-                    },
-                    onNoClicked = {
-                    }
-                )
-            }
-
-            currentTask.decisionYes?.let {
-                displayActionTree(it)
-            }
-
-            currentTask.decisionNo?.let {
-                displayActionTree(it)
-            }
+        item {
+            ChecklistListElement(
+                modifier = Modifier.padding(top = 5.dp),
+                entity = currentTasks,
+            )
         }
-
-        displayActionTree(currentTasks)
     }
 }
 
@@ -199,6 +213,6 @@ private fun ActionContainer() {
     showSystemUi = true
 )
 @Composable
-fun PreviewAddProtocol() {
-    AddProtocolView()
+fun PreviewAddChecklist() {
+
 }

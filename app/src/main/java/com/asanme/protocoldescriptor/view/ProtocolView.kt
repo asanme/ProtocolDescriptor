@@ -3,38 +3,43 @@ package com.asanme.protocoldescriptor.view
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.FloatingActionButtonElevation
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.asanme.protocoldescriptor.R
+import com.asanme.protocoldescriptor.model.enum.Routes
 import com.asanme.protocoldescriptor.ui.component.*
-import com.asanme.protocoldescriptor.viewmodel.ProtocolViewModel
+import com.asanme.protocoldescriptor.ui.theme.DarkBlue
+import com.asanme.protocoldescriptor.viewmodel.ActivityViewModel
 
 @Composable
 fun ProtocolView(
     navController: NavHostController,
-    protocolViewModel: ProtocolViewModel,
+    activityViewModel: ActivityViewModel,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.padding(10.dp)
     ) {
-        ProtocolHeader(navController, protocolViewModel)
-        ProtocolBody(navController, protocolViewModel)
+        ProtocolHeader(navController, activityViewModel)
+        ProtocolBody(navController, activityViewModel)
     }
 }
 
 @Composable
 fun ProtocolHeader(
     navController: NavHostController,
-    protocolViewModel: ProtocolViewModel
+    activityViewModel: ActivityViewModel
 ) {
-    val title by protocolViewModel.topic.collectAsState()
+    val title by activityViewModel.topic.collectAsState()
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -67,9 +72,9 @@ fun ProtocolHeader(
 @Composable
 fun ProtocolBody(
     navController: NavHostController,
-    protocolViewModel: ProtocolViewModel
+    activityViewModel: ActivityViewModel
 ) {
-    val activities by protocolViewModel.activities.collectAsState()
+    val activities by activityViewModel.activities.collectAsState()
     var searchString by rememberSaveable { mutableStateOf("") }
 
     CustomSearchBar(
@@ -79,18 +84,35 @@ fun ProtocolBody(
         }
     )
 
-    LazyColumn(
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Column(
+        horizontalAlignment = Alignment.End
     ) {
-        items(
-            activities.filter { protocol ->
-                protocol.name.contains(searchString, true) || protocol.acronym.contains(
-                    searchString,
-                    true
-                )
+        LazyColumn(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+        ) {
+            items(
+                activities.filter { protocol ->
+                    protocol.name.contains(searchString, true)
+                }
+            ) { currentItem ->
+                ProtocolDescriptionItem(currentItem)
             }
-        ) { currentItem ->
-            ProtocolDescriptionItem(currentItem)
+        }
+
+        FloatingActionButton(
+            backgroundColor = Color.White,
+            contentColor = DarkBlue,
+            onClick = {
+                navController.navigate("${Routes.AddChecklistView.route}/${activityViewModel.topic.value._id}")
+            },
+        ) {
+            MIconContainer(
+                imageVectorResource = R.drawable.add,
+                contentDescriptionResource = R.string.add_icon
+            )
         }
     }
 }

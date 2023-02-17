@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MSquaredButton(
     modifier: Modifier = Modifier,
-    buttonSize: Dp = 45.dp,
+    buttonSize: Dp = 50.dp,
     shape: Shape = RoundedCornerShape(10.dp),
     backgroundColor: Color = Color.White,
     onClick: () -> Unit,

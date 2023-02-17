@@ -1,6 +1,7 @@
 package com.asanme.protocoldescriptor.model
 
 import com.asanme.protocoldescriptor.model.entity.Activity
+import com.asanme.protocoldescriptor.model.entity.Checklist
 import com.asanme.protocoldescriptor.model.entity.Topic
 import retrofit2.Call
 import retrofit2.Response
@@ -26,5 +27,5 @@ interface RetrofitAPI {
     suspend fun putActivity(@Path("id") topicID: String, @Body modifiedActivity: Topic): Response<Topic>
 
     @GET("/api/activities/{id}")
-    suspend fun getActivities(@Path("id") topicId: String): Response<List<Activity>>
+    suspend fun getActivities(@Path("id") topicId: String): Response<List<Checklist>>
 }

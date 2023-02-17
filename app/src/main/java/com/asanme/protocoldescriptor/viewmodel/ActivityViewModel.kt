@@ -5,13 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.asanme.protocoldescriptor.model.RetrofitAPI
 import com.asanme.protocoldescriptor.model.entity.Activity
+import com.asanme.protocoldescriptor.model.entity.Checklist
 import com.asanme.protocoldescriptor.model.entity.Topic
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.net.ConnectException
 
-class ProtocolViewModel(
+class ActivityViewModel(
     private val topicId: String,
     private val api: RetrofitAPI
 ) : ViewModel() {
@@ -22,10 +23,10 @@ class ProtocolViewModel(
         }
     }
 
-    private val _activities = MutableStateFlow<List<Activity>>(emptyList())
+    private val _activities = MutableStateFlow<List<Checklist>>(emptyList())
     val activities = _activities.asStateFlow()
 
-    private val _topic = MutableStateFlow<Topic>(Topic("", ""))
+    private val _topic = MutableStateFlow(Topic("", ""))
     val topic = _topic.asStateFlow()
 
     private suspend fun retrieveActivities() = viewModelScope.launch {

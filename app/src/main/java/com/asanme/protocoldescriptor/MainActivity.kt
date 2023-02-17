@@ -15,10 +15,11 @@ import com.asanme.protocoldescriptor.model.RetrofitAPI
 import com.asanme.protocoldescriptor.model.enum.Routes
 import com.asanme.protocoldescriptor.model.helper.RetrofitHelper
 import com.asanme.protocoldescriptor.ui.theme.ProtocolDescriptorTheme
+import com.asanme.protocoldescriptor.view.AddChecklistView
 import com.asanme.protocoldescriptor.view.AddProtocolView
 import com.asanme.protocoldescriptor.view.ProtocolView
 import com.asanme.protocoldescriptor.view.TopicsView
-import com.asanme.protocoldescriptor.viewmodel.ProtocolViewModel
+import com.asanme.protocoldescriptor.viewmodel.ActivityViewModel
 import com.asanme.protocoldescriptor.viewmodel.TopicViewModel
 
 class MainActivity : ComponentActivity() {
@@ -53,11 +54,23 @@ fun App() {
             AddProtocolView()
         }
 
+        composable("${Routes.AddChecklistView.route}/{topicId}") { backStackEntry ->
+            backStackEntry.arguments?.getString("topicId")?.let { topicId ->
+                AddChecklistView(
+                    navController,
+                    ActivityViewModel(
+                        topicId,
+                        RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
+                    ),
+                )
+            }
+        }
+
         composable("${Routes.ProtocolView.route}/{topicId}") { backStackEntry ->
             backStackEntry.arguments?.getString("topicId")?.let { topicId ->
                 ProtocolView(
                     navController,
-                    ProtocolViewModel(
+                    ActivityViewModel(
                         topicId,
                         RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
                     ),

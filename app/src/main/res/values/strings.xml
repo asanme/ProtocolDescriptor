@@ -28,4 +28,7 @@
     <string name="close_icon">Close Icon</string>
     <string name="no_acronym_label">No acronym</string>
     <string name="name_label">Name</string>
+    <string name="task_name">Task name</string>
+    <string name="checklist_name">Checklist name</string>
+    <string name="add_checklist">Add new checklist</string>
 </resources>
