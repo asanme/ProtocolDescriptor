@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.asanme.protocoldescriptor.model.RetrofitAPI
 import com.asanme.protocoldescriptor.model.entity.ChecklistTask
+import java.util.*
 
 class ChecklistViewModel(
     topicId: String,
@@ -20,16 +21,16 @@ class ChecklistViewModel(
         _tasks.remove(task)
     }
 
-    fun modifyName(index: Int, name: String) {
-        _tasks[index].name = name
+    fun modifyName(taskID: UUID, name: String) {
+        _tasks.filter { task -> task.taskID == taskID }.map { task -> task.name = name }
     }
 
-    fun modifyDescription(index: Int, description: String) {
-        _tasks[index].description = description
+    fun modifyDescription(taskID: UUID, description: String) {
+        _tasks.filter { task -> task.taskID == taskID }
+            .map { task -> task.description = description }
     }
 
-    fun modifyStatus(index: Int, status: String) {
-        _tasks[index].status = status
+    fun modifyStatus(taskID: UUID, status: String) {
+        _tasks.filter { task -> task.taskID == taskID }.map { task -> task.status = status }
     }
 }
-

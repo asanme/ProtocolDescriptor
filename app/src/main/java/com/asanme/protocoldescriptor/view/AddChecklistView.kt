@@ -2,11 +2,15 @@ package com.asanme.protocoldescriptor.view
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -203,28 +207,26 @@ private fun ActionContainer(
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             items(
-                tasks.size
-            ) { index ->
-                val task = tasks[index]
-                val movableContent = movableContentOf {
-                    ChecklistItem(
-                        task = task,
-                        onDiscardClicked = {
-                            checklistViewModel.removeTask(task)
-                        },
-                        onDoneClicked = {
-                            checklistViewModel.modifyStatus(index, "pending")
-                        },
-                        onNameChange = { newName ->
-                            checklistViewModel.modifyName(index, newName)
-                        },
-                        onDescriptionChange = { newDescription ->
-                            checklistViewModel.modifyDescription(index, newDescription)
-                        }
-                    )
+                items = tasks,
+                key = { key ->
+                    key.taskID
                 }
-
-                movableContent()
+            ) { task ->
+                ChecklistItem(
+                    task = task,
+                    onDiscardClicked = {
+                        checklistViewModel.removeTask(task)
+                    },
+                    onDoneClicked = {
+                        checklistViewModel.modifyStatus(task.taskID, "pending")
+                    },
+                    onNameChange = { newName ->
+                        checklistViewModel.modifyName(task.taskID, newName)
+                    },
+                    onDescriptionChange = { newDescription ->
+                        checklistViewModel.modifyDescription(task.taskID, newDescription)
+                    }
+                )
             }
         }
 
