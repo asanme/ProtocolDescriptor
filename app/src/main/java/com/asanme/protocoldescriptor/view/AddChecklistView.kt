@@ -1,9 +1,9 @@
 package com.asanme.protocoldescriptor.view
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,25 +21,24 @@ import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
 import com.asanme.protocoldescriptor.model.entity.ChecklistTask
 import com.asanme.protocoldescriptor.ui.component.*
+import com.asanme.protocoldescriptor.ui.theme.DarkBlue
 import com.asanme.protocoldescriptor.ui.theme.Pinkish
 import com.asanme.protocoldescriptor.ui.theme.Yellowish
-import com.asanme.protocoldescriptor.viewmodel.ActivityViewModel
+import com.asanme.protocoldescriptor.viewmodel.ChecklistViewModel
 
 @Composable
 fun AddChecklistView(
     navController: NavController?,
-    activityViewModel: ActivityViewModel
+    checklistViewModel: ChecklistViewModel
 ) {
-    val topic by activityViewModel.topic.collectAsState()
-    Log.i("ChecklistViewModel", topic._id)
     Column(
-        Modifier
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = Modifier
             .fillMaxSize()
             .padding(10.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         AddNewChecklistHeader(navController)
-        ChecklistBody()
+        ChecklistBody(checklistViewModel)
     }
 }
 
@@ -52,7 +51,7 @@ fun AddNewChecklistHeader(
 }
 
 @Composable
-private fun ChecklistBody() {
+private fun ChecklistBody(checklistViewModel: ChecklistViewModel) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -63,7 +62,7 @@ private fun ChecklistBody() {
     }
 
     Divider(thickness = 2.dp)
-    ActionContainer()
+    ActionContainer(checklistViewModel)
 }
 
 @Composable
@@ -110,9 +109,10 @@ private fun TopControls(
                 },
             ) {
                 MIconContainer(
-                    imageVectorResource = R.drawable.done,
+                    imageVectorResource = R.drawable.add,
                     contentDescriptionResource = R.string.done,
-                    iconColor = Color.White
+                    iconColor = Color.White,
+                    modifier = Modifier.size(90.dp)
                 )
             }
         }
@@ -152,7 +152,7 @@ private fun CreateChecklistButton() {
     ) {
         MImageContainer(
             imageVectorResource = R.drawable.add,
-            contentDescriptionResource = R.string.return_arrow
+            contentDescriptionResource = R.string.add_icon
         )
     }
 }
@@ -188,21 +188,61 @@ private fun TaskTitle() {
 }
 
 @Composable
-private fun ActionContainer() {
-    val currentTasks = ChecklistTask(
-        "First Element",
-        "Basic Description",
-        "pending"
-    )
+private fun ActionContainer(
+    checklistViewModel: ChecklistViewModel
+) {
+    val tasks = checklistViewModel.tasks
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+    Column(
+        horizontalAlignment = Alignment.End
     ) {
-        item {
-            ChecklistListElement(
-                modifier = Modifier.padding(top = 5.dp),
-                entity = currentTasks,
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            items(
+                tasks.size
+            ) { index ->
+                val task = tasks[index]
+                val movableContent = movableContentOf {
+                    ChecklistItem(
+                        task = task,
+                        onDiscardClicked = {
+                            checklistViewModel.removeTask(task)
+                        },
+                        onDoneClicked = {
+                            checklistViewModel.modifyStatus(index, "pending")
+                        },
+                        onNameChange = { newName ->
+                            checklistViewModel.modifyName(index, newName)
+                        },
+                        onDescriptionChange = { newDescription ->
+                            checklistViewModel.modifyDescription(index, newDescription)
+                        }
+                    )
+                }
+
+                movableContent()
+            }
+        }
+
+        FloatingActionButton(
+            onClick = {
+                checklistViewModel.addNewTask(
+                    ChecklistTask(
+                        "",
+                        "",
+                    )
+                )
+            },
+            backgroundColor = Color.White
+        ) {
+            MIconContainer(
+                imageVectorResource = R.drawable.add,
+                contentDescriptionResource = R.string.add_icon,
+                iconColor = DarkBlue
             )
         }
     }

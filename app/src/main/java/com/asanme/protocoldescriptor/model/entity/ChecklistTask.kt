@@ -1,7 +1,9 @@
 package com.asanme.protocoldescriptor.model.entity
 
+import java.util.*
+
 data class ChecklistTask(
-    val name: String,
-    val description: String,
-    val status: String,
+    var name: String,
+    var description: String,
+    var status: String = "edit",
 )

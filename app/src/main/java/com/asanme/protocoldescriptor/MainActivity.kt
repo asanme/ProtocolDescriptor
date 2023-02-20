@@ -20,6 +20,7 @@ import com.asanme.protocoldescriptor.view.AddProtocolView
 import com.asanme.protocoldescriptor.view.ProtocolView
 import com.asanme.protocoldescriptor.view.TopicsView
 import com.asanme.protocoldescriptor.viewmodel.ActivityViewModel
+import com.asanme.protocoldescriptor.viewmodel.ChecklistViewModel
 import com.asanme.protocoldescriptor.viewmodel.TopicViewModel
 
 class MainActivity : ComponentActivity() {
@@ -58,7 +59,7 @@ fun App() {
             backStackEntry.arguments?.getString("topicId")?.let { topicId ->
                 AddChecklistView(
                     navController,
-                    ActivityViewModel(
+                    ChecklistViewModel(
                         topicId,
                         RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
                     ),
