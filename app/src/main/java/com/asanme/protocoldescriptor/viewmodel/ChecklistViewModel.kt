@@ -10,7 +10,7 @@ class ChecklistViewModel(
     topicId: String,
     private val api: RetrofitAPI
 ) : ViewModel() {
-    private val _tasks = mutableStateListOf<ChecklistTask>()
+    private var _tasks = mutableStateListOf<ChecklistTask>()
     val tasks: MutableList<ChecklistTask> = _tasks
 
     fun addNewTask(task: ChecklistTask) {
@@ -21,16 +21,22 @@ class ChecklistViewModel(
         _tasks.remove(task)
     }
 
-    fun modifyName(taskID: UUID, name: String) {
-        _tasks.filter { task -> task.taskID == taskID }.map { task -> task.name = name }
-    }
+    fun modifyTask(taskID: UUID, modifiedTask: ChecklistTask) {
+        var index = 0
+        var found = false
+        for (task in _tasks) {
+            if (task.taskID != taskID && !found) {
+                index++
+            } else {
+                found = true
+            }
+        }
 
-    fun modifyDescription(taskID: UUID, description: String) {
-        _tasks.filter { task -> task.taskID == taskID }
-            .map { task -> task.description = description }
-    }
-
-    fun modifyStatus(taskID: UUID, status: String) {
-        _tasks.filter { task -> task.taskID == taskID }.map { task -> task.status = status }
+        _tasks[index] = _tasks[index].copy(
+            name = modifiedTask.name,
+            description = modifiedTask.description,
+            status = modifiedTask.status,
+            taskID = modifiedTask.taskID
+        )
     }
 }

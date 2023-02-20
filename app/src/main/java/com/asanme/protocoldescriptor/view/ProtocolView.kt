@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.asanme.protocoldescriptor.R
-import com.asanme.protocoldescriptor.model.enum.Routes
+import com.asanme.protocoldescriptor.model.enum.ViewRoutes
 import com.asanme.protocoldescriptor.ui.component.*
 import com.asanme.protocoldescriptor.ui.theme.DarkBlue
 import com.asanme.protocoldescriptor.viewmodel.ActivityViewModel
@@ -105,7 +105,7 @@ fun ProtocolBody(
             backgroundColor = Color.White,
             contentColor = DarkBlue,
             onClick = {
-                navController.navigate("${Routes.AddChecklistView.route}/${activityViewModel.topic.value._id}")
+                navController.navigate("${ViewRoutes.AddChecklistView.route}/${activityViewModel.topic.value._id}")
             },
         ) {
             MIconContainer(

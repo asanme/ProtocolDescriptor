@@ -197,14 +197,13 @@ private fun ActionContainer(
 ) {
     val tasks = checklistViewModel.tasks
 
-    Column(
-        horizontalAlignment = Alignment.End
+    Box(
+        contentAlignment = Alignment.BottomEnd
     ) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .weight(1f),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            contentPadding = PaddingValues(top = 5.dp, bottom = 60.dp)
         ) {
             items(
                 items = tasks,
@@ -217,15 +216,9 @@ private fun ActionContainer(
                     onDiscardClicked = {
                         checklistViewModel.removeTask(task)
                     },
-                    onDoneClicked = {
-                        checklistViewModel.modifyStatus(task.taskID, "pending")
+                    onDoneClicked = { newTask ->
+                        checklistViewModel.modifyTask(task.taskID, newTask)
                     },
-                    onNameChange = { newName ->
-                        checklistViewModel.modifyName(task.taskID, newName)
-                    },
-                    onDescriptionChange = { newDescription ->
-                        checklistViewModel.modifyDescription(task.taskID, newDescription)
-                    }
                 )
             }
         }

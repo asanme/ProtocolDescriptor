@@ -12,7 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.asanme.protocoldescriptor.model.RetrofitAPI
-import com.asanme.protocoldescriptor.model.enum.Routes
+import com.asanme.protocoldescriptor.model.enum.ViewRoutes
 import com.asanme.protocoldescriptor.model.helper.RetrofitHelper
 import com.asanme.protocoldescriptor.ui.theme.ProtocolDescriptorTheme
 import com.asanme.protocoldescriptor.view.AddChecklistView
@@ -42,8 +42,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Routes.TopicView.route) {
-        composable(Routes.TopicView.route) {
+    NavHost(navController = navController, startDestination = ViewRoutes.TopicView.route) {
+        composable(ViewRoutes.TopicView.route) {
             TopicsView(
                 navController, TopicViewModel(
                     RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
@@ -51,11 +51,11 @@ fun App() {
             )
         }
 
-        composable(Routes.AddProtocolView.route) {
+        composable(ViewRoutes.AddProtocolView.route) {
             AddProtocolView()
         }
 
-        composable("${Routes.AddChecklistView.route}/{topicId}") { backStackEntry ->
+        composable("${ViewRoutes.AddChecklistView.route}/{topicId}") { backStackEntry ->
             backStackEntry.arguments?.getString("topicId")?.let { topicId ->
                 AddChecklistView(
                     navController,
@@ -67,7 +67,7 @@ fun App() {
             }
         }
 
-        composable("${Routes.ProtocolView.route}/{topicId}") { backStackEntry ->
+        composable("${ViewRoutes.ProtocolView.route}/{topicId}") { backStackEntry ->
             backStackEntry.arguments?.getString("topicId")?.let { topicId ->
                 ProtocolView(
                     navController,

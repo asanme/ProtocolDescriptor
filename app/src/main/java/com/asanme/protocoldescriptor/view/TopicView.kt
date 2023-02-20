@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.*
 import androidx.navigation.NavHostController
 import com.asanme.protocoldescriptor.model.RetrofitAPI
-import com.asanme.protocoldescriptor.model.enum.Routes
+import com.asanme.protocoldescriptor.model.enum.ViewRoutes
 import com.asanme.protocoldescriptor.model.helper.RetrofitHelper
 import com.asanme.protocoldescriptor.ui.component.CustomSearchBar
 import com.asanme.protocoldescriptor.ui.component.CustomTitle
@@ -68,7 +68,7 @@ fun TopicsBody(navController: NavHostController?, topicViewModel: TopicViewModel
                 TopicLazyItem(
                     currentItem.name,
                     onItemClicked = {
-                        navController?.navigate("${Routes.ProtocolView.route}/${currentItem._id}")
+                        navController?.navigate("${ViewRoutes.ProtocolView.route}/${currentItem._id}")
                     }
                 )
             }

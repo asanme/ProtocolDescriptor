@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
 import com.asanme.protocoldescriptor.model.entity.ChecklistTask
+import com.asanme.protocoldescriptor.model.enum.TaskStatus
 
 @Composable
 
@@ -31,16 +32,14 @@ fun ChecklistItem(
     modifier: Modifier = Modifier,
     task: ChecklistTask,
     onDiscardClicked: () -> Unit,
-    onDoneClicked: () -> Unit,
-    onNameChange: (String) -> Unit,
-    onDescriptionChange: (String) -> Unit,
+    onDoneClicked: (task: ChecklistTask) -> Unit,
 ) {
-    if (task.status == "edit") {
+    if (task.status == TaskStatus.Edit.status) {
         var taskName by rememberSaveable {
             mutableStateOf(task.name)
         }
 
-        var descriptionText by rememberSaveable {
+        var taskDescription by rememberSaveable {
             mutableStateOf(task.description)
         }
 
@@ -48,6 +47,7 @@ fun ChecklistItem(
             shape = RoundedCornerShape(10.dp),
             backgroundColor = Color.White,
             elevation = 5.dp,
+            modifier = modifier
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -61,7 +61,6 @@ fun ChecklistItem(
                     },
                     onValueChange = { enteredAction ->
                         taskName = enteredAction
-                        onNameChange(enteredAction)
                     },
                     text = taskName
                 )
@@ -73,10 +72,9 @@ fun ChecklistItem(
                         )
                     },
                     onValueChange = { enteredDescription ->
-                        descriptionText = enteredDescription
-                        onDescriptionChange(enteredDescription)
+                        taskDescription = enteredDescription
                     },
-                    text = descriptionText
+                    text = taskDescription
                 )
 
                 Row(
@@ -105,7 +103,16 @@ fun ChecklistItem(
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color(221, 224, 73)
                         ),
-                        onClick = onDoneClicked,
+                        onClick = {
+                            onDoneClicked(
+                                ChecklistTask(
+                                    taskName,
+                                    taskDescription,
+                                    TaskStatus.Pending.status,
+                                    task.taskID
+                                )
+                            )
+                        },
                         modifier = Modifier
                             .weight(5f)
                             .height(40.dp),
@@ -167,18 +174,8 @@ fun TestChecklistItem() {
     Column(Modifier.fillMaxSize()) {
         ChecklistItem(
             task = ChecklistTask("", ""),
-            onDiscardClicked = {
-
-            },
-            onDoneClicked = {
-
-            },
-            onNameChange = {
-
-            },
-            onDescriptionChange = {
-
-            }
+            onDiscardClicked = { },
+            onDoneClicked = { },
         )
     }
 }
