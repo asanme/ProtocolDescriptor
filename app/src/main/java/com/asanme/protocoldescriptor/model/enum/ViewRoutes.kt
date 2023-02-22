@@ -5,4 +5,5 @@ sealed class ViewRoutes(val route: String) {
     object AddProtocolView : ViewRoutes("addProtocolView")
     object ProtocolView : ViewRoutes("protocolView")
     object AddChecklistView : ViewRoutes("addChecklistView")
+    object ChecklistView : ViewRoutes("checklistView")
 }

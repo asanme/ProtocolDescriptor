@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 fun MEditText(
     label: @Composable () -> Unit,
     leadingIcon: (@Composable () -> Unit)? = null,
+    trailingIcon: (@Composable () -> Unit)? = null,
     onValueChange: (String) -> Unit,
     text: String,
     singleLine: Boolean = false,
@@ -22,6 +23,7 @@ fun MEditText(
     cornerShape: Dp = 25.dp,
     textColor: Color = Color(3, 4, 94),
     cursorColor: Color = Color.Black,
+
 ) {
     Card(
         elevation = 5.dp,
@@ -41,8 +43,9 @@ fun MEditText(
             ),
             label = label,
             leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
             onValueChange = onValueChange,
-            singleLine = singleLine
+            singleLine = singleLine,
         )
     }
 }

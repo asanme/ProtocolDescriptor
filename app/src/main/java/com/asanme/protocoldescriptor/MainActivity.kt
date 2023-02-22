@@ -8,17 +8,16 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.asanme.protocoldescriptor.model.RetrofitAPI
 import com.asanme.protocoldescriptor.model.enum.ViewRoutes
 import com.asanme.protocoldescriptor.model.helper.RetrofitHelper
 import com.asanme.protocoldescriptor.ui.theme.ProtocolDescriptorTheme
-import com.asanme.protocoldescriptor.view.AddChecklistView
-import com.asanme.protocoldescriptor.view.AddProtocolView
-import com.asanme.protocoldescriptor.view.ProtocolView
-import com.asanme.protocoldescriptor.view.TopicsView
+import com.asanme.protocoldescriptor.view.*
 import com.asanme.protocoldescriptor.viewmodel.ActivityViewModel
 import com.asanme.protocoldescriptor.viewmodel.ChecklistViewModel
 import com.asanme.protocoldescriptor.viewmodel.TopicViewModel
@@ -51,15 +50,11 @@ fun App() {
             )
         }
 
-        composable(ViewRoutes.AddProtocolView.route) {
-            AddProtocolView()
-        }
-
-        composable("${ViewRoutes.AddChecklistView.route}/{topicId}") { backStackEntry ->
+        composable("${ViewRoutes.ProtocolView.route}/{topicId}") { backStackEntry ->
             backStackEntry.arguments?.getString("topicId")?.let { topicId ->
-                AddChecklistView(
+                ProtocolView(
                     navController,
-                    ChecklistViewModel(
+                    ActivityViewModel(
                         topicId,
                         RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
                     ),
@@ -67,12 +62,43 @@ fun App() {
             }
         }
 
-        composable("${ViewRoutes.ProtocolView.route}/{topicId}") { backStackEntry ->
+        composable("${ViewRoutes.AddChecklistView.route}/{topicId}") { backStackEntry ->
             backStackEntry.arguments?.getString("topicId")?.let { topicId ->
-                ProtocolView(
+                AddChecklistView(
                     navController,
-                    ActivityViewModel(
+                    ChecklistViewModel(
+                        topicId = topicId,
+                        api = RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
+                    ),
+                )
+            }
+        }
+
+
+        composable(ViewRoutes.AddProtocolView.route) {
+            AddProtocolView()
+        }
+
+        composable(
+            "${ViewRoutes.ChecklistView.route}/{topicId}/{checklistId}",
+            arguments = listOf(
+                navArgument("topicId") {
+                    type = NavType.StringType
+                },
+                navArgument("checklistId") {
+                    type = NavType.StringType
+                }
+            )
+        ) { backStackEntry ->
+            val topicId = backStackEntry.arguments?.getString("topicId")
+            val checklistId = backStackEntry.arguments?.getString("checklistId")
+
+            if (topicId != null && checklistId != null) {
+                ChecklistView(
+                    navController,
+                    ChecklistViewModel(
                         topicId,
+                        checklistId,
                         RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
                     ),
                 )

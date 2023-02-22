@@ -28,4 +28,10 @@ interface RetrofitAPI {
 
     @GET("/api/activities/{id}")
     suspend fun getActivities(@Path("id") topicId: String): Response<List<Checklist>>
+
+    @POST("/api/activities")
+    suspend fun postChecklist(@Body newChecklist: Checklist): Call<Checklist>
+
+    @GET("/api/activities/{topicId}/{checklistId}")
+    suspend fun getChecklist(@Path("topicId") topicId: String, @Path("checklistId") checklistId: String): Response<Checklist>
 }

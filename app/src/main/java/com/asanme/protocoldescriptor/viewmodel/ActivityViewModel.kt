@@ -29,7 +29,7 @@ class ActivityViewModel(
     private val _topic = MutableStateFlow(Topic("", ""))
     val topic = _topic.asStateFlow()
 
-    private suspend fun retrieveActivities() = viewModelScope.launch {
+    private fun retrieveActivities() = viewModelScope.launch {
         try {
             api.getActivities(topicId).body()?.let { retrievedActivities ->
                 _activities.emit(retrievedActivities)
@@ -39,7 +39,7 @@ class ActivityViewModel(
         }
     }
 
-    private suspend fun retrieveTitle() = viewModelScope.launch {
+    private fun retrieveTitle() = viewModelScope.launch {
         try {
             api.getTopic(topicId).body()?.let { topic ->
                 _topic.emit(topic)

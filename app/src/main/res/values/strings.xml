@@ -11,7 +11,7 @@
     <string name="cancel_icon">Cancel Icon</string>
     <string name="prev_action">Previous Action</string>
     <string name="action_name">Action name</string>
-    <string name="action_description">Description</string>
+    <string name="task_description">Task Description</string>
     <string name="done">Done</string>
     <string name="discard">Discard</string>
     <string name="minimize_icon">Minimize</string>
@@ -31,4 +31,5 @@
     <string name="task_name">Task name</string>
     <string name="checklist_name">Checklist name</string>
     <string name="add_checklist">New Checklist</string>
+    <string name="error_icon">Error</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.asanme.protocoldescriptor.ui.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -14,20 +15,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
-import com.asanme.protocoldescriptor.model.entity.Activity
 import com.asanme.protocoldescriptor.model.entity.Checklist
 
 @Composable
-fun ProtocolDescriptionItem(item: Checklist) {
+fun ProtocolDescriptionItem(
+    item: Checklist,
+    onItemClicked: () -> Unit
+) {
     Card(
         elevation = 5.dp,
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .padding(
-                top = 5.dp,
-                bottom = 12.dp
-            )
+            .clickable { onItemClicked() }
     ) {
         Column(
             horizontalAlignment = Alignment.Start,

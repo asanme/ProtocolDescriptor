@@ -91,13 +91,23 @@ fun ProtocolBody(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth(),
+            contentPadding = PaddingValues(top = 5.dp, bottom = 60.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             items(
-                activities.filter { protocol ->
+                items = activities.filter { protocol ->
                     protocol.name.contains(searchString, true)
+                },
+                key = { key ->
+                    key._id.toString()
                 }
             ) { currentItem ->
-                ProtocolDescriptionItem(currentItem)
+                ProtocolDescriptionItem(
+                    currentItem,
+                    onItemClicked = {
+                        navController.navigate("${ViewRoutes.ChecklistView.route}/${currentItem.topicId}/${currentItem._id}")
+                    }
+                )
             }
         }
 

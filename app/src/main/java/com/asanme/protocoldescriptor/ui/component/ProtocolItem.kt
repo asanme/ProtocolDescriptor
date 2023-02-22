@@ -61,7 +61,7 @@ fun ProtocolItem() {
             MEditText(
                 label = {
                     Text(
-                        stringResource(R.string.action_description),
+                        stringResource(R.string.task_description),
                     )
                 },
                 onValueChange = { enteredDescription ->

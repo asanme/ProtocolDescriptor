@@ -4,7 +4,6 @@ import com.asanme.protocoldescriptor.model.enum.TaskStatus
 import java.util.*
 
 data class ChecklistTask(
-    val name: String,
     val description: String,
     val status: String = TaskStatus.Edit.status,
     val taskID: UUID = UUID.randomUUID(),

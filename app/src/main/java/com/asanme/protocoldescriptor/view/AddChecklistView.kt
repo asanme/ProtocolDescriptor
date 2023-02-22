@@ -3,7 +3,6 @@ package com.asanme.protocoldescriptor.view
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +23,7 @@ import androidx.navigation.NavController
 import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
 import com.asanme.protocoldescriptor.model.entity.ChecklistTask
+import com.asanme.protocoldescriptor.model.enum.TaskStatus
 import com.asanme.protocoldescriptor.ui.component.*
 import com.asanme.protocoldescriptor.ui.theme.DarkBlue
 import com.asanme.protocoldescriptor.ui.theme.Pinkish
@@ -41,28 +41,34 @@ fun AddChecklistView(
             .fillMaxSize()
             .padding(10.dp),
     ) {
-        AddNewChecklistHeader(navController)
+        AddNewChecklistHeader(navController, checklistViewModel)
         ChecklistBody(checklistViewModel)
     }
 }
 
 @Composable
 fun AddNewChecklistHeader(
-    navController: NavController?
+    navController: NavController?,
+    checklistViewModel: ChecklistViewModel
 ) {
-    TopControls(navController)
-    ChecklistFields()
+    TopControls(
+        navController,
+        checklistViewModel
+    )
+
+    ChecklistFields(checklistViewModel)
 }
 
 @Composable
-private fun ChecklistBody(checklistViewModel: ChecklistViewModel) {
+private fun ChecklistBody(
+    checklistViewModel: ChecklistViewModel
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
     ) {
         TaskTitle()
-        //EditButton()
     }
 
     ActionContainer(checklistViewModel)
@@ -70,7 +76,8 @@ private fun ChecklistBody(checklistViewModel: ChecklistViewModel) {
 
 @Composable
 private fun TopControls(
-    navController: NavController?
+    navController: NavController?,
+    checklistViewModel: ChecklistViewModel
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -109,6 +116,7 @@ private fun TopControls(
             MSquaredButton(
                 backgroundColor = Pinkish,
                 onClick = {
+                    checklistViewModel.publishChecklist()
                 },
             ) {
                 MIconContainer(
@@ -123,8 +131,8 @@ private fun TopControls(
 }
 
 @Composable
-private fun ChecklistFields() {
-    var protocolText by rememberSaveable {
+private fun ChecklistFields(checklistViewModel: ChecklistViewModel) {
+    var checklistName by rememberSaveable {
         mutableStateOf("")
     }
 
@@ -138,11 +146,21 @@ private fun ChecklistFields() {
                 contentDescriptionResource = R.string.protocol_icon
             )
         },
-        text = protocolText,
+        text = checklistName,
         singleLine = true,
         onValueChange = { newText ->
-            protocolText = newText
+            checklistName = newText
+            checklistViewModel.changeTitle(newText)
         },
+        trailingIcon = {
+            if (checklistName.isEmpty()) {
+                MIconContainer(
+                    imageVectorResource = R.drawable.error,
+                    contentDescriptionResource = R.string.error_icon,
+                    iconColor = Color.Red
+                )
+            }
+        }
     )
 }
 
@@ -230,7 +248,7 @@ private fun ActionContainer(
                 checklistViewModel.addNewTask(
                     ChecklistTask(
                         "",
-                        "",
+                        TaskStatus.Edit.status,
                     )
                 )
             },

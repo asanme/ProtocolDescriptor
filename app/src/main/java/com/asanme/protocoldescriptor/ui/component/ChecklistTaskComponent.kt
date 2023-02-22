@@ -47,74 +47,12 @@ fun ChecklistItem(
 }
 
 @Composable
-private fun ViewTaskMode(
-    modifier: Modifier,
-    task: ChecklistTask,
-    onEditClicked: (task: ChecklistTask) -> Unit
-) {
-    Card(
-        shape = RoundedCornerShape(10.dp),
-        backgroundColor = Color.White,
-        elevation = 5.dp,
-        modifier = modifier,
-    ) {
-        Column(
-            modifier = Modifier.padding(10.dp),
-        ) {
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = task.name,
-                    fontFamily = interFamily,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(3, 4, 94),
-                    fontSize = 18.sp,
-                    textAlign = TextAlign.Justify,
-                    modifier = Modifier.weight(8f)
-                )
-
-                MIconContainer(
-                    imageVectorResource = R.drawable.edit,
-                    contentDescriptionResource = R.string.pencil_icon,
-                    modifier = Modifier.clickable {
-                        onEditClicked(
-                            ChecklistTask(
-                                task.name,
-                                task.description,
-                                TaskStatus.Edit.status,
-                                task.taskID
-                            )
-                        )
-                    }
-                )
-            }
-
-            Text(
-                text = task.description,
-                fontFamily = interFamily,
-                fontWeight = FontWeight.Normal,
-                color = Color(3, 4, 94),
-                fontSize = 14.sp,
-                textAlign = TextAlign.Justify
-            )
-        }
-    }
-}
-
-@Composable
 private fun EditTaskMode(
     task: ChecklistTask,
     modifier: Modifier,
     onDiscardClicked: () -> Unit,
     onDoneClicked: (task: ChecklistTask) -> Unit
 ) {
-    var taskName by rememberSaveable {
-        mutableStateOf(task.name)
-    }
-
     var taskDescription by rememberSaveable {
         mutableStateOf(task.description)
     }
@@ -132,25 +70,22 @@ private fun EditTaskMode(
             MEditText(
                 label = {
                     Text(
-                        stringResource(R.string.task_name),
-                    )
-                },
-                onValueChange = { enteredAction ->
-                    taskName = enteredAction
-                },
-                text = taskName
-            )
-
-            MEditText(
-                label = {
-                    Text(
-                        stringResource(R.string.action_description),
+                        stringResource(R.string.task_description),
                     )
                 },
                 onValueChange = { enteredDescription ->
                     taskDescription = enteredDescription
                 },
-                text = taskDescription
+                text = taskDescription,
+                trailingIcon = {
+                    if(taskDescription.isEmpty()) {
+                        MIconContainer(
+                            imageVectorResource = R.drawable.error,
+                            contentDescriptionResource = R.string.error_icon,
+                            iconColor = Color.Red
+                        )
+                    }
+                }
             )
 
             Row(
@@ -180,14 +115,17 @@ private fun EditTaskMode(
                         backgroundColor = Color(221, 224, 73)
                     ),
                     onClick = {
-                        onDoneClicked(
-                            ChecklistTask(
-                                taskName,
-                                taskDescription,
-                                TaskStatus.Pending.status,
-                                task.taskID
+                        if (taskDescription.isNotEmpty()) {
+                            onDoneClicked(
+                                ChecklistTask(
+                                    taskDescription,
+                                    TaskStatus.Pending.status,
+                                    task.taskID
+                                )
                             )
-                        )
+                        } else {
+
+                        }
                     },
                     modifier = Modifier
                         .weight(5f)
@@ -204,6 +142,54 @@ private fun EditTaskMode(
     }
 }
 
+@Composable
+private fun ViewTaskMode(
+    modifier: Modifier,
+    task: ChecklistTask,
+    onEditClicked: (task: ChecklistTask) -> Unit
+) {
+    Card(
+        shape = RoundedCornerShape(10.dp),
+        backgroundColor = Color.White,
+        elevation = 5.dp,
+        modifier = modifier,
+    ) {
+        Column(
+            modifier = Modifier.padding(10.dp),
+        ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                MIconContainer(
+                    imageVectorResource = R.drawable.edit,
+                    contentDescriptionResource = R.string.pencil_icon,
+                    modifier = Modifier.clickable {
+                        onEditClicked(
+                            ChecklistTask(
+                                task.description,
+                                TaskStatus.Edit.status,
+                                task.taskID
+                            )
+                        )
+                    }
+                )
+
+                Text(
+                    text = task.description,
+                    fontFamily = interFamily,
+                    fontWeight = FontWeight.Normal,
+                    color = Color(3, 4, 94),
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+        }
+    }
+}
+
 @Preview(
     device = Devices.NEXUS_6,
     showSystemUi = true
@@ -212,7 +198,7 @@ private fun EditTaskMode(
 fun TestChecklistItem() {
     Column(Modifier.fillMaxSize()) {
         ChecklistItem(
-            task = ChecklistTask("", "", TaskStatus.Pending.status),
+            task = ChecklistTask("", TaskStatus.Pending.status),
             onDiscardClicked = { },
             onDoneClicked = { },
             onEditClicked = { }

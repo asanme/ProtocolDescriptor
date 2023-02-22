@@ -1,17 +1,56 @@
 package com.asanme.protocoldescriptor.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.asanme.protocoldescriptor.model.RetrofitAPI
+import com.asanme.protocoldescriptor.model.entity.Checklist
 import com.asanme.protocoldescriptor.model.entity.ChecklistTask
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import java.util.*
 
 class ChecklistViewModel(
-    topicId: String,
+    private val checklistId: String? = null,
+    private val topicId: String,
     private val api: RetrofitAPI
 ) : ViewModel() {
     private var _tasks = mutableStateListOf<ChecklistTask>()
     val tasks: MutableList<ChecklistTask> = _tasks
+
+    private var _checklist =
+        MutableStateFlow(Checklist(topicId = topicId, name = "", tasks = _tasks))
+
+    fun retrieveTask() = viewModelScope.launch {
+        try {
+            if (checklistId != null) {
+                api.getChecklist(topicId, checklistId).body()?.let { retrievedChecklist ->
+                    _checklist.emit(retrievedChecklist)
+                }
+            }
+        } catch (err: Exception) {
+            Log.e("Error", err.stackTraceToString())
+        }
+    }
+
+    fun publishChecklist() = viewModelScope.launch {
+        try {
+            api.postChecklist(_checklist.value)
+        } catch (err: Exception) {
+            Log.e("Exception", err.stackTraceToString())
+        }
+    }
+
+    fun changeTitle(newTitle: String) = viewModelScope.launch {
+        _checklist.emit(
+            Checklist(
+                topicId = topicId,
+                name = newTitle,
+                tasks = _tasks
+            )
+        )
+    }
 
     fun addNewTask(task: ChecklistTask) {
         _tasks.add(task)
@@ -24,16 +63,17 @@ class ChecklistViewModel(
     fun modifyTask(taskID: UUID, modifiedTask: ChecklistTask) {
         var index = 0
         var found = false
-        for (task in _tasks) {
-            if (task.taskID != taskID && !found) {
-                index++
-            } else {
+
+        while (!found && index < _tasks.size) {
+            val task = _tasks[index]
+            if (task.taskID == taskID) {
                 found = true
+            } else {
+                index++
             }
         }
 
         _tasks[index] = _tasks[index].copy(
-            name = modifiedTask.name,
             description = modifiedTask.description,
             status = modifiedTask.status,
             taskID = modifiedTask.taskID
