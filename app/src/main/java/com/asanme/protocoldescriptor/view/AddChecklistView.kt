@@ -62,10 +62,9 @@ private fun ChecklistBody(checklistViewModel: ChecklistViewModel) {
         modifier = Modifier.fillMaxWidth()
     ) {
         TaskTitle()
-        EditButton()
+        //EditButton()
     }
 
-    Divider(thickness = 2.dp)
     ActionContainer(checklistViewModel)
 }
 
@@ -219,6 +218,9 @@ private fun ActionContainer(
                     onDoneClicked = { newTask ->
                         checklistViewModel.modifyTask(task.taskID, newTask)
                     },
+                    onEditClicked = { taskToModify ->
+                        checklistViewModel.modifyTask(task.taskID, taskToModify)
+                    }
                 )
             }
         }
