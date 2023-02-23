@@ -32,7 +32,7 @@ class ChecklistViewModel(
                 if (response.isSuccessful) {
                     response.body()?.let { retrievedChecklist ->
                         _checklist.emit(retrievedChecklist)
-                        _tasks = _checklist.value.tasks.toMutableStateList()
+                        _tasks.addAll(_checklist.value.tasks.toMutableStateList())
                     }
                 } else {
                     Log.e("Error", "Error getting response from API")

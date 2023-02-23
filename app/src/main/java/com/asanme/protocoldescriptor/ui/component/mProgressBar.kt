@@ -60,7 +60,6 @@ fun CProgressBar() {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(start = 10.dp),
                 ) {
                     MIconContainer(
                         imageVectorResource = R.drawable.progress,
@@ -82,7 +81,6 @@ fun CProgressBar() {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(end = 10.dp),
                 ) {
                     Text(
                         text = "$tasksDone / $maxTasks",

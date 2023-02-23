@@ -86,7 +86,7 @@ private fun TopControls(
 private fun ChecklistBodyXD(
     checklistViewModel: ChecklistViewModel,
 ) {
-    val currentChecklist = checklistViewModel.checklist.collectAsState()
+    val currentChecklist = checklistViewModel.tasks
     CustomTitle(text = stringResource(id = R.string.task_label))
 
     LazyColumn(
@@ -95,7 +95,7 @@ private fun ChecklistBodyXD(
         modifier = Modifier.fillMaxSize(),
     ) {
         items(
-            currentChecklist.value.tasks,
+            currentChecklist,
             key = { task ->
                 task.taskID
             }
@@ -104,9 +104,9 @@ private fun ChecklistBodyXD(
                 currentTask,
                 onCheckedChange = { isChecked ->
                     var newStatus = if (isChecked) {
-                        TaskStatus.Pending
-                    } else {
                         TaskStatus.Done
+                    } else {
+                        TaskStatus.Pending
                     }
 
                     checklistViewModel.modifyTask(
