@@ -1,6 +1,5 @@
 package com.asanme.protocoldescriptor.model
 
-import com.asanme.protocoldescriptor.model.entity.Activity
 import com.asanme.protocoldescriptor.model.entity.Checklist
 import com.asanme.protocoldescriptor.model.entity.Topic
 import retrofit2.Call
@@ -24,7 +23,10 @@ interface RetrofitAPI {
     suspend fun postActivity(@Body newTopic: Topic): Call<Topic>
 
     @PUT("/api/activities/{id}")
-    suspend fun putActivity(@Path("id") topicID: String, @Body modifiedActivity: Topic): Response<Topic>
+    suspend fun putActivity(
+        @Path("id") topicID: String,
+        @Body modifiedActivity: Topic
+    ): Response<Topic>
 
     @GET("/api/activities/{id}")
     suspend fun getActivities(@Path("id") topicId: String): Response<List<Checklist>>
@@ -32,6 +34,9 @@ interface RetrofitAPI {
     @POST("/api/activities")
     suspend fun postChecklist(@Body newChecklist: Checklist): Call<Checklist>
 
-    @GET("/api/activities/{topicId}/{checklistId}")
-    suspend fun getChecklist(@Path("topicId") topicId: String, @Path("checklistId") checklistId: String): Response<Checklist>
+    @GET("/api/activities/checklists/{topicId}/{checklistId}")
+    suspend fun getChecklist(
+        @Path("checklistId") checklistId: String,
+        @Path("topicId") topicId: String,
+    ): Response<Checklist>
 }
