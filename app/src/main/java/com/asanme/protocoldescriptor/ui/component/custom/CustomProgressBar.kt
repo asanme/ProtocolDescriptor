@@ -35,7 +35,7 @@ import com.asanme.protocoldescriptor.ui.theme.Purple700
 import com.asanme.protocoldescriptor.ui.theme.YellowG
 
 @Composable
-fun CProgressBar() {
+fun CustomProgressBar() {
     Card(
         elevation = 5.dp,
         shape = RoundedCornerShape(20.dp)
@@ -61,7 +61,7 @@ fun CProgressBar() {
                     modifier = Modifier
                         .weight(1f)
                 ) {
-                    MIconContainer(
+                    CustomIcon(
                         imageVectorResource = R.drawable.progress,
                         contentDescriptionResource = R.string.progress
                     )
@@ -125,7 +125,7 @@ fun CProgressBar() {
 }
 
 @Composable
-fun CustomProgressBar() {
+fun ProgressBarWorkin() {
     val context = LocalContext.current
     var progressCount: Int by remember { mutableStateOf(0) }
     var progress by remember { mutableStateOf(0f) }
@@ -233,9 +233,8 @@ fun CustomProgressBar() {
 
 }
 
-@Preview(
-)
+@Preview
 @Composable
 private fun PreviewBar() {
-    CProgressBar()
+    CustomProgressBar()
 }

@@ -28,7 +28,7 @@ import com.asanme.protocoldescriptor.model.entity.ProtocolTask
 
 @Composable
 
-fun ProtocolItem() {
+fun EditProtocolItem() {
     var actionText by rememberSaveable {
         mutableStateOf("")
     }
@@ -46,7 +46,7 @@ fun ProtocolItem() {
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier.padding(10.dp)
         ) {
-            MEditText(
+            CustomTextField(
                 label = {
                     Text(
                         stringResource(R.string.action_name),
@@ -58,7 +58,7 @@ fun ProtocolItem() {
                 text = actionText
             )
 
-            MEditText(
+            CustomTextField(
                 label = {
                     Text(
                         stringResource(R.string.task_description),
@@ -117,7 +117,7 @@ fun ProtocolItem() {
 }
 
 @Composable
-fun ProtocolListElement(
+fun EditProtocolItemPreview(
     entity: ProtocolTask,
     modifier: Modifier = Modifier,
     onYesClicked: () -> Unit,
@@ -152,7 +152,7 @@ fun ProtocolListElement(
                     modifier = Modifier.weight(8f)
                 )
 
-                MImageContainer(
+                CustomImage(
                     imageVectorResource = if (!isExpanded) R.drawable.expand else R.drawable.minimize,
                     contentDescriptionResource = if (!isExpanded) R.string.minimize_icon else R.string.expand_icon,
                     modifier = Modifier
@@ -257,9 +257,9 @@ fun ProtocolListElement(
     showSystemUi = true
 )
 @Composable
-fun TestEditAction() {
+private fun TestEditAction() {
     Column(Modifier.fillMaxSize()) {
-        ProtocolItem()
+        EditProtocolItem()
     }
 }
 
@@ -268,9 +268,9 @@ fun TestEditAction() {
     showSystemUi = true
 )
 @Composable
-fun TestPreview() {
+private fun TestPreview() {
     Column(Modifier.fillMaxSize()) {
-        ProtocolListElement(
+        EditProtocolItemPreview(
             ProtocolTask(
                 "Testing with the title",
                 "Lorem ipsum dolor sit amet, "

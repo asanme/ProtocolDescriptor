@@ -38,7 +38,7 @@ fun ChecklistView(
             .padding(10.dp),
     ) {
         TopControls(navController, checklistViewModel)
-        CProgressBar()
+        CustomProgressBar()
         ChecklistBodyXD(checklistViewModel)
     }
 }
@@ -55,12 +55,12 @@ private fun TopControls(
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         Box {
-            MSquaredButton(
+            CustomSquaredButton(
                 onClick = {
                     navController?.navigateUp()
                 },
             ) {
-                MImageContainer(
+                CustomImage(
                     imageVectorResource = R.drawable.arrow,
                     contentDescriptionResource = R.string.return_arrow
                 )
@@ -100,7 +100,7 @@ private fun ChecklistBodyXD(
                 task.taskID
             }
         ) { currentTask ->
-            ChecklistTaskItem(
+            ViewChecklistItem(
                 currentTask,
                 onCheckedChange = { isChecked ->
                     var newStatus = if (isChecked) {

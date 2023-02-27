@@ -4,7 +4,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.asanme.protocoldescriptor.R
@@ -14,7 +13,7 @@ fun CustomSearchBar(
     text: String,
     onValueChange: (String) -> Unit
 ) {
-    MEditText(
+    CustomTextField(
         label = {
             Text(
                 stringResource(R.string.search),
@@ -22,7 +21,7 @@ fun CustomSearchBar(
             )
         },
         leadingIcon = {
-            MIconContainer(
+            CustomIcon(
                 imageVectorResource = R.drawable.search,
                 contentDescriptionResource = R.string.search_icon,
                 iconColor = Color.White
@@ -37,13 +36,9 @@ fun CustomSearchBar(
     )
 }
 
-@Preview(
-    name = "TopicsView",
-    showSystemUi = true,
-    device = Devices.NEXUS_6
-)
+@Preview
 @Composable
-fun TopicsPreview() {
+private fun TopicsPreview() {
     CustomSearchBar(
         "Test",
         onValueChange = { }

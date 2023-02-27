@@ -13,13 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun TopicLazyItem(
+fun TopicPreviewItem(
     titleString: String,
     onItemClicked: () -> Unit,
 ) {
@@ -56,14 +55,10 @@ fun TopicLazyItem(
     }
 }
 
-@Preview(
-    name = "Item",
-    showSystemUi = true,
-    device = Devices.NEXUS_6
-)
+@Preview
 @Composable
 fun Preview() {
-    TopicLazyItem(
+    TopicPreviewItem(
         "Testing",
         onItemClicked = {
 

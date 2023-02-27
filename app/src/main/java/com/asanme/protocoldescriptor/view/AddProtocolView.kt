@@ -56,11 +56,11 @@ private fun TopControls() {
         modifier = Modifier.fillMaxWidth()
     ) {
         Box(Modifier.weight(2f)) {
-            MSquaredButton(
+            CustomSquaredButton(
                 onClick = {
                 },
             ) {
-                MImageContainer(
+                CustomImage(
                     imageVectorResource = R.drawable.arrow,
                     contentDescriptionResource = R.string.return_arrow
                 )
@@ -94,12 +94,12 @@ private fun ProtocolFields() {
         mutableStateOf("")
     }
 
-    MEditText(
+    CustomTextField(
         label = {
             Text(stringResource(id = R.string.protocol_label))
         },
         leadingIcon = {
-            MIconContainer(
+            CustomIcon(
                 imageVectorResource = R.drawable.protocol_icon,
                 contentDescriptionResource = R.string.protocol_icon
             )
@@ -111,12 +111,12 @@ private fun ProtocolFields() {
         },
     )
 
-    MEditText(
+    CustomTextField(
         label = {
             Text(stringResource(id = R.string.acronym_label))
         },
         leadingIcon = {
-            MIconContainer(
+            CustomIcon(
                 imageVectorResource = R.drawable.acronym_icon,
                 contentDescriptionResource = R.string.acronym_icon
             )
@@ -131,11 +131,11 @@ private fun ProtocolFields() {
 
 @Composable
 private fun EditButton() {
-    MSquaredButton(
+    CustomSquaredButton(
         onClick = {},
         backgroundColor = Color(221, 224, 73)
     ) {
-        MImageContainer(
+        CustomImage(
             imageVectorResource = R.drawable.pencil,
             contentDescriptionResource = R.string.pencil_icon,
             modifier = Modifier.size(25.dp),
@@ -167,11 +167,11 @@ private fun ActionContainer() {
     ) {
         fun displayActionTree(currentTask: ProtocolTask) {
             item {
-                ProtocolItem()
+                EditProtocolItem()
             }
 
             item {
-                ProtocolListElement(
+                EditProtocolItemPreview(
                     modifier = Modifier.padding(top = 5.dp),
                     entity = currentTask,
                     onYesClicked = {

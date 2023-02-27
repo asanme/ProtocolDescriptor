@@ -45,12 +45,12 @@ fun ProtocolHeader(
         modifier = Modifier.fillMaxWidth()
     ) {
         Box(Modifier.weight(2f)) {
-            MSquaredButton(
+            CustomSquaredButton(
                 onClick = {
                     navController.navigateUp()
                 },
             ) {
-                MImageContainer(
+                CustomImage(
                     imageVectorResource = R.drawable.arrow,
                     contentDescriptionResource = R.string.return_arrow
                 )
@@ -102,7 +102,7 @@ fun ProtocolBody(
                     key._id.toString()
                 }
             ) { currentItem ->
-                ProtocolDescriptionItem(
+                ChecklistPreviewItem(
                     currentItem,
                     onItemClicked = {
                         navController.navigate("${ViewRoutes.ChecklistView.route}/${currentItem.topicId}/${currentItem._id}")
@@ -118,7 +118,7 @@ fun ProtocolBody(
                 navController.navigate("${ViewRoutes.AddChecklistView.route}/${activityViewModel.topic.value._id}")
             },
         ) {
-            MIconContainer(
+            CustomIcon(
                 imageVectorResource = R.drawable.add,
                 contentDescriptionResource = R.string.add_icon
             )

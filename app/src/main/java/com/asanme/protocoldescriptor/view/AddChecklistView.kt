@@ -84,12 +84,12 @@ private fun TopControls(
         modifier = Modifier.fillMaxWidth()
     ) {
         Box(Modifier.weight(2f)) {
-            MSquaredButton(
+            CustomSquaredButton(
                 onClick = {
                     navController?.navigateUp()
                 },
             ) {
-                MImageContainer(
+                CustomImage(
                     imageVectorResource = R.drawable.arrow,
                     contentDescriptionResource = R.string.return_arrow
                 )
@@ -113,13 +113,13 @@ private fun TopControls(
             Modifier.weight(2f),
             contentAlignment = Alignment.CenterEnd
         ) {
-            MSquaredButton(
+            CustomSquaredButton(
                 backgroundColor = Pinkish,
                 onClick = {
                     checklistViewModel.publishChecklist()
                 },
             ) {
-                MIconContainer(
+                CustomIcon(
                     imageVectorResource = R.drawable.add,
                     contentDescriptionResource = R.string.done,
                     iconColor = Color.White,
@@ -136,12 +136,12 @@ private fun ChecklistFields(checklistViewModel: ChecklistViewModel) {
         mutableStateOf("")
     }
 
-    MEditText(
+    CustomTextField(
         label = {
             Text(stringResource(id = R.string.checklist_name))
         },
         leadingIcon = {
-            MIconContainer(
+            CustomIcon(
                 imageVectorResource = R.drawable.protocol_icon,
                 contentDescriptionResource = R.string.protocol_icon
             )
@@ -154,7 +154,7 @@ private fun ChecklistFields(checklistViewModel: ChecklistViewModel) {
         },
         trailingIcon = {
             if (checklistName.isEmpty()) {
-                MIconContainer(
+                CustomIcon(
                     imageVectorResource = R.drawable.error,
                     contentDescriptionResource = R.string.error_icon,
                     iconColor = Color.Red
@@ -166,12 +166,12 @@ private fun ChecklistFields(checklistViewModel: ChecklistViewModel) {
 
 @Composable
 private fun CreateChecklistButton() {
-    MSquaredButton(
+    CustomSquaredButton(
         onClick = {
         },
         backgroundColor = Pinkish
     ) {
-        MImageContainer(
+        CustomImage(
             imageVectorResource = R.drawable.add,
             contentDescriptionResource = R.string.add_icon
         )
@@ -184,13 +184,13 @@ private fun EditButton() {
         mutableStateOf(false)
     }
 
-    MSquaredButton(
+    CustomSquaredButton(
         onClick = {
             isEditing = !isEditing
         },
         backgroundColor = Yellowish
     ) {
-        MImageContainer(
+        CustomImage(
             imageVectorResource = if (!isEditing) R.drawable.pencil else R.drawable.done,
             contentDescriptionResource = R.string.return_arrow
         )
@@ -228,7 +228,7 @@ private fun ActionContainer(
                     key.taskID
                 }
             ) { task ->
-                ChecklistItem(
+                EditChecklistItem(
                     task = task,
                     onDiscardClicked = {
                         checklistViewModel.removeTask(task)
@@ -254,7 +254,7 @@ private fun ActionContainer(
             },
             backgroundColor = Color.White
         ) {
-            MIconContainer(
+            CustomIcon(
                 imageVectorResource = R.drawable.add,
                 contentDescriptionResource = R.string.add_icon,
                 iconColor = DarkBlue

@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.asanme.protocoldescriptor.fonts.interFamily
@@ -23,4 +24,10 @@ fun CustomTitle(
         color = color,
         fontFamily = interFamily
     )
+}
+
+@Preview
+@Composable
+private fun PreviewItem() {
+    CustomTitle(text = "kjlñasdf")
 }

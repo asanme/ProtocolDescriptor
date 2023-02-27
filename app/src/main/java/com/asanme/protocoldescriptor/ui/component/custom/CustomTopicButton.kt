@@ -25,7 +25,7 @@ import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
 
 @Composable
-fun NewTopicMenu(
+fun CustomTopicButton(
     onTopicAdd: (String) -> Unit
 ) {
     var isMenuShown by rememberSaveable { mutableStateOf(false) }
@@ -54,14 +54,14 @@ fun NewTopicMenu(
                 modifier = Modifier.weight(5f),
                 horizontalArrangement = Arrangement.End
             ) {
-                MSquaredButton(
+                CustomSquaredButton(
                     backgroundColor = Color.White,
                     shape = CircleShape,
                     onClick = {
                         isMenuShown = !isMenuShown
                     },
                 ) {
-                    MImageContainer(
+                    CustomImage(
                         imageVectorResource = R.drawable.add,
                         contentDescriptionResource = R.string.add_icon,
                     )
@@ -85,7 +85,7 @@ fun NewTopicMenu(
                     fontSize = 20.sp
                 )
 
-                MEditText(
+                CustomTextField(
                     label = {
                         Text(
                             text = stringResource(R.string.topic),
@@ -105,7 +105,7 @@ fun NewTopicMenu(
                     text = topicText,
                 )
 
-                MEditText(
+                CustomTextField(
                     label = {
                         Text(
                             text = stringResource(R.string.icon),
@@ -184,5 +184,5 @@ fun NewTopicMenu(
 )
 @Composable
 fun Testing() {
-    NewTopicMenu(onTopicAdd = {})
+    CustomTopicButton(onTopicAdd = {})
 }

@@ -7,8 +7,6 @@ import androidx.compose.material.Card
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
@@ -19,7 +17,7 @@ import com.asanme.protocoldescriptor.model.entity.ChecklistTask
 import com.asanme.protocoldescriptor.model.enum.TaskStatus
 
 @Composable
-fun ChecklistTaskItem(
+fun ViewChecklistItem(
     task: ChecklistTask,
     onCheckedChange: (Boolean) -> Unit
 ) {
@@ -57,9 +55,8 @@ fun ChecklistTaskItem(
 @Preview
 @Composable
 private fun PreviewItem() {
-    ChecklistTaskItem(
+    ViewChecklistItem(
         ChecklistTask("kajsfñlasjdfñjs afkasjfklasjf añfjasdfj askjflkasjfklsj afdkljsfkljsakfdljsakld fjsdkajf  kslajdfksla"),
-        onCheckedChange = {
-
-        })
+        onCheckedChange = {}
+    )
 }

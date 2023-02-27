@@ -11,14 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
 import com.asanme.protocoldescriptor.model.entity.Checklist
+import com.asanme.protocoldescriptor.model.entity.ChecklistTask
+import com.asanme.protocoldescriptor.model.enum.TaskStatus
 
 @Composable
-fun ProtocolDescriptionItem(
+fun ChecklistPreviewItem(
     item: Checklist,
     onItemClicked: () -> Unit
 ) {
@@ -82,4 +85,20 @@ fun ProtocolDescriptionItem(
              */
         }
     }
+}
+
+@Preview
+@Composable
+private fun PreviewItem() {
+    ChecklistPreviewItem(
+        Checklist(
+            null,
+            "",
+            "",
+            mutableListOf(ChecklistTask("Desc", TaskStatus.Pending.status))
+        ),
+        onItemClicked = {
+
+        }
+    )
 }

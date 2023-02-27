@@ -9,9 +9,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.asanme.protocoldescriptor.R
 
 @Composable
-fun MImageContainer(
+fun CustomImage(
     modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Crop,
     @DrawableRes imageVectorResource: Int,
@@ -22,5 +24,14 @@ fun MImageContainer(
         contentDescription = stringResource(id = contentDescriptionResource),
         modifier = modifier,
         contentScale = contentScale,
+    )
+}
+
+@Preview
+@Composable
+private fun PreviewItem() {
+    CustomImage(
+        imageVectorResource = R.drawable.progress,
+        contentDescriptionResource = R.string.task_description
     )
 }

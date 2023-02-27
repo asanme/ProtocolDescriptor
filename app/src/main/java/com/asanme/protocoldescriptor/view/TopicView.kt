@@ -13,17 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.*
 import androidx.navigation.NavHostController
 import com.asanme.protocoldescriptor.model.RetrofitAPI
 import com.asanme.protocoldescriptor.model.enum.ViewRoutes
 import com.asanme.protocoldescriptor.model.helper.RetrofitHelper
 import com.asanme.protocoldescriptor.ui.component.CustomSearchBar
 import com.asanme.protocoldescriptor.ui.component.CustomTitle
-import com.asanme.protocoldescriptor.ui.component.NewTopicMenu
-import com.asanme.protocoldescriptor.ui.component.TopicLazyItem
+import com.asanme.protocoldescriptor.ui.component.CustomTopicButton
+import com.asanme.protocoldescriptor.ui.component.TopicPreviewItem
 import com.asanme.protocoldescriptor.viewmodel.TopicViewModel
-import kotlinx.coroutines.coroutineScope
 
 @Composable
 fun TopicsView(navController: NavHostController, topicViewModel: TopicViewModel) {
@@ -65,7 +63,7 @@ fun TopicsBody(navController: NavHostController?, topicViewModel: TopicViewModel
                     topic.name.contains(searchString, true)
                 }
             ) { currentItem ->
-                TopicLazyItem(
+                TopicPreviewItem(
                     currentItem.name,
                     onItemClicked = {
                         navController?.navigate("${ViewRoutes.ProtocolView.route}/${currentItem._id}")
@@ -74,7 +72,7 @@ fun TopicsBody(navController: NavHostController?, topicViewModel: TopicViewModel
             }
         }
 
-        NewTopicMenu(
+        CustomTopicButton(
             onTopicAdd = { }
         )
     }

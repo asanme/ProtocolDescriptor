@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.asanme.protocoldescriptor.model.RetrofitAPI
-import com.asanme.protocoldescriptor.model.entity.Activity
 import com.asanme.protocoldescriptor.model.entity.Checklist
 import com.asanme.protocoldescriptor.model.entity.Topic
 import kotlinx.coroutines.flow.MutableStateFlow

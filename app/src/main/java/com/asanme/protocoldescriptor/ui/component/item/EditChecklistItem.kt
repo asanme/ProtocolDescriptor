@@ -28,7 +28,7 @@ import com.asanme.protocoldescriptor.model.entity.ChecklistTask
 import com.asanme.protocoldescriptor.model.enum.TaskStatus
 
 @Composable
-fun ChecklistItem(
+fun EditChecklistItem(
     modifier: Modifier = Modifier,
     task: ChecklistTask,
     onDiscardClicked: () -> Unit,
@@ -37,17 +37,17 @@ fun ChecklistItem(
 ) {
     when (task.status) {
         TaskStatus.Edit.status -> {
-            EditTaskMode(task, modifier, onDiscardClicked, onDoneClicked)
+            EditTaskItem(task, modifier, onDiscardClicked, onDoneClicked)
         }
 
         TaskStatus.Pending.status -> {
-            ViewTaskMode(modifier, task, onEditClicked)
+            ViewTaskItem(modifier, task, onEditClicked)
         }
     }
 }
 
 @Composable
-private fun EditTaskMode(
+private fun EditTaskItem(
     task: ChecklistTask,
     modifier: Modifier,
     onDiscardClicked: () -> Unit,
@@ -67,7 +67,7 @@ private fun EditTaskMode(
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier.padding(10.dp)
         ) {
-            MEditText(
+            CustomTextField(
                 label = {
                     Text(
                         stringResource(R.string.task_description),
@@ -78,8 +78,8 @@ private fun EditTaskMode(
                 },
                 text = taskDescription,
                 trailingIcon = {
-                    if(taskDescription.isEmpty()) {
-                        MIconContainer(
+                    if (taskDescription.isEmpty()) {
+                        CustomIcon(
                             imageVectorResource = R.drawable.error,
                             contentDescriptionResource = R.string.error_icon,
                             iconColor = Color.Red
@@ -143,7 +143,7 @@ private fun EditTaskMode(
 }
 
 @Composable
-private fun ViewTaskMode(
+private fun ViewTaskItem(
     modifier: Modifier,
     task: ChecklistTask,
     onEditClicked: (task: ChecklistTask) -> Unit
@@ -162,7 +162,7 @@ private fun ViewTaskMode(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 horizontalAlignment = Alignment.End
             ) {
-                MIconContainer(
+                CustomIcon(
                     imageVectorResource = R.drawable.edit,
                     contentDescriptionResource = R.string.pencil_icon,
                     modifier = Modifier.clickable {
@@ -195,9 +195,9 @@ private fun ViewTaskMode(
     showSystemUi = true
 )
 @Composable
-fun TestChecklistItem() {
+private fun TestChecklistItem() {
     Column(Modifier.fillMaxSize()) {
-        ChecklistItem(
+        EditChecklistItem(
             task = ChecklistTask("", TaskStatus.Pending.status),
             onDiscardClicked = { },
             onDoneClicked = { },
