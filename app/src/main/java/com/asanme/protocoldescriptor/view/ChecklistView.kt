@@ -39,7 +39,7 @@ fun ChecklistView(
     ) {
         TopControls(navController, checklistViewModel)
         CustomProgressBar()
-        ChecklistBodyXD(checklistViewModel)
+        ChecklistBody(checklistViewModel)
     }
 }
 
@@ -83,7 +83,7 @@ private fun TopControls(
 }
 
 @Composable
-private fun ChecklistBodyXD(
+private fun ChecklistBody(
     checklistViewModel: ChecklistViewModel,
 ) {
     val currentChecklist = checklistViewModel.tasks
@@ -113,6 +113,8 @@ private fun ChecklistBodyXD(
                         currentTask.taskID,
                         currentTask.copy(status = newStatus.status)
                     )
+
+                    checklistViewModel.uploadChanges()
                 }
             )
         }

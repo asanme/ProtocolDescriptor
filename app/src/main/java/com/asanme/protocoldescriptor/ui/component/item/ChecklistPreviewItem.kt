@@ -1,6 +1,8 @@
 package com.asanme.protocoldescriptor.ui.component
 
-import androidx.compose.foundation.clickable
+import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -20,17 +22,22 @@ import com.asanme.protocoldescriptor.model.entity.Checklist
 import com.asanme.protocoldescriptor.model.entity.ChecklistTask
 import com.asanme.protocoldescriptor.model.enum.TaskStatus
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ChecklistPreviewItem(
     item: Checklist,
-    onItemClicked: () -> Unit
+    onItemClicked: () -> Unit,
+    onItemLongClicked: () -> Unit,
 ) {
     Card(
         elevation = 5.dp,
         shape = RoundedCornerShape(10.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onItemClicked() }
+            .combinedClickable(
+                onClick = onItemClicked,
+                onLongClick = onItemLongClicked,
+            )
     ) {
         Column(
             horizontalAlignment = Alignment.Start,
@@ -98,6 +105,9 @@ private fun PreviewItem() {
             mutableListOf(ChecklistTask("Desc", TaskStatus.Pending.status))
         ),
         onItemClicked = {
+
+        },
+        onItemLongClicked = {
 
         }
     )

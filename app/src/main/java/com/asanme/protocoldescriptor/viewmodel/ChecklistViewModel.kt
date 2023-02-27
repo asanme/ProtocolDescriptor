@@ -22,8 +22,32 @@ class ChecklistViewModel(
     val tasks: MutableList<ChecklistTask> = _tasks
 
     private var _checklist =
-        MutableStateFlow(Checklist(topicId = topicId, name = "", tasks = _tasks))
+        MutableStateFlow(Checklist(topicId = topicId, name = "", tasks = tasks))
     val checklist = _checklist.asStateFlow()
+
+    fun uploadChanges() = viewModelScope.launch {
+        try {
+            if (checklistId != null) {
+                _checklist.value = _checklist.value.copy(tasks = tasks)
+
+                val response = api.putChecklist(
+                    topicId,
+                    checklistId,
+                    checklist.value
+                )
+
+                if (response.isSuccessful) {
+                    response.body()?.let { retrievedChecklist ->
+                        Log.e("Success", "Uploaded successfully")
+                    }
+                } else {
+                    Log.e("Error", "Error getting response from API")
+                }
+            }
+        } catch (err: Exception) {
+            Log.e("Error", err.stackTraceToString())
+        }
+    }
 
     fun retrieveTask() = viewModelScope.launch {
         try {
@@ -43,6 +67,7 @@ class ChecklistViewModel(
         }
     }
 
+    // TODO Check server response to close AddChecklistView
     fun publishChecklist() = viewModelScope.launch {
         try {
             api.postChecklist(_checklist.value)
@@ -61,6 +86,7 @@ class ChecklistViewModel(
         )
     }
 
+    // Local methods
     fun addNewTask(task: ChecklistTask) {
         _tasks.add(task)
     }

@@ -3,6 +3,7 @@ package com.asanme.protocoldescriptor.view
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -15,6 +16,7 @@ import androidx.navigation.NavHostController
 import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.model.enum.ViewRoutes
 import com.asanme.protocoldescriptor.ui.component.*
+import com.asanme.protocoldescriptor.ui.component.custom.AlertDialogSample
 import com.asanme.protocoldescriptor.ui.theme.DarkBlue
 import com.asanme.protocoldescriptor.viewmodel.ActivityViewModel
 
@@ -75,6 +77,9 @@ fun ProtocolBody(
 ) {
     val activities by activityViewModel.activities.collectAsState()
     var searchString by rememberSaveable { mutableStateOf("") }
+    var isDialogShown by remember {
+        mutableStateOf(false)
+    }
 
     CustomSearchBar(
         searchString,
@@ -106,10 +111,15 @@ fun ProtocolBody(
                     currentItem,
                     onItemClicked = {
                         navController.navigate("${ViewRoutes.ChecklistView.route}/${currentItem.topicId}/${currentItem._id}")
+                    },
+                    onItemLongClicked = {
+                        isDialogShown = true
                     }
                 )
             }
         }
+
+        AlertDialogSample(isMenuShown = isDialogShown)
 
         FloatingActionButton(
             backgroundColor = Color.White,
