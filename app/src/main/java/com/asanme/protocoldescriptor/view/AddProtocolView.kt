@@ -46,7 +46,7 @@ fun AddNewProtocolHeader() {
 private fun ProtocolBody() {
     TaskTitle()
     Divider(thickness = 2.dp)
-    ActionContainer()
+    TaskContainer()
 }
 
 @Composable
@@ -155,7 +155,7 @@ private fun TaskTitle() {
 }
 
 @Composable
-private fun ActionContainer() {
+private fun TaskContainer() {
     val currentTasks = ProtocolTask(
         "First Element",
         "Basic Description"

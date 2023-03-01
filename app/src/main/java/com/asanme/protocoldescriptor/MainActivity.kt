@@ -40,23 +40,27 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App() {
+    val retrofit = RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = ViewRoutes.TopicView.route) {
+
+    NavHost(
+        navController = navController,
+        startDestination = ViewRoutes.TopicView.route
+    ) {
         composable(ViewRoutes.TopicView.route) {
             TopicsView(
-                navController, TopicViewModel(
-                    RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
-                )
+                navController,
+                TopicViewModel(retrofit)
             )
         }
 
         composable("${ViewRoutes.ProtocolView.route}/{topicId}") { backStackEntry ->
             backStackEntry.arguments?.getString("topicId")?.let { topicId ->
-                ProtocolView(
+                ActivityView(
                     navController,
                     ActivityViewModel(
                         topicId,
-                        RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
+                        retrofit
                     ),
                 )
             }
@@ -68,15 +72,10 @@ fun App() {
                     navController,
                     ChecklistViewModel(
                         topicId = topicId,
-                        api = RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
+                        api = retrofit
                     ),
                 )
             }
-        }
-
-
-        composable(ViewRoutes.AddProtocolView.route) {
-            AddProtocolView()
         }
 
         composable(
@@ -97,12 +96,16 @@ fun App() {
                 ChecklistView(
                     navController,
                     ChecklistViewModel(
-                        topicId,
-                        checklistId,
-                        RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
+                        checklistId = topicId,
+                        topicId = checklistId,
+                        api = retrofit
                     ),
                 )
             }
+        }
+
+        composable(ViewRoutes.AddProtocolView.route) {
+            AddProtocolView()
         }
     }
 }

@@ -33,4 +33,7 @@
     <string name="add_checklist">New Checklist</string>
     <string name="error_icon">Error</string>
     <string name="progress">Progress</string>
+    <string name="delete_checklist">Delete Checklist</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
 </resources>

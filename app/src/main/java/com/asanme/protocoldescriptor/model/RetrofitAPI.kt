@@ -41,4 +41,9 @@ interface RetrofitAPI {
         @Path("checklistId") checklistId: String,
         @Path("topicId") topicId: String,
     ): Response<Checklist>
+
+    @DELETE("/api/activities/{checklistId}")
+    suspend fun deleteChecklist(
+        @Path("checklistId") checklistId: String
+    ): Response<List<Checklist>>
 }

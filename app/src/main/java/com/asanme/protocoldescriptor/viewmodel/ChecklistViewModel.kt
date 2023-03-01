@@ -11,6 +11,7 @@ import com.asanme.protocoldescriptor.model.entity.ChecklistTask
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import retrofit2.awaitResponse
 import java.util.*
 
 class ChecklistViewModel(
@@ -24,6 +25,9 @@ class ChecklistViewModel(
     private var _checklist =
         MutableStateFlow(Checklist(topicId = topicId, name = "", tasks = tasks))
     val checklist = _checklist.asStateFlow()
+
+    private var _shouldReturn = MutableStateFlow(false)
+    val shouldReturn = _shouldReturn.asStateFlow()
 
     fun uploadChanges() = viewModelScope.launch {
         try {
@@ -70,7 +74,13 @@ class ChecklistViewModel(
     // TODO Check server response to close AddChecklistView
     fun publishChecklist() = viewModelScope.launch {
         try {
-            api.postChecklist(_checklist.value)
+            val test = api.postChecklist(_checklist.value).awaitResponse()
+
+            if(test.isSuccessful){
+                _shouldReturn.emit(true)
+            } else {
+                _shouldReturn.emit(true)
+            }
         } catch (err: Exception) {
             Log.e("Exception", err.stackTraceToString())
         }

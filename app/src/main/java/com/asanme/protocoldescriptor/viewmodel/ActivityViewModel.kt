@@ -28,7 +28,18 @@ class ActivityViewModel(
     private val _topic = MutableStateFlow(Topic("", ""))
     val topic = _topic.asStateFlow()
 
-    private fun retrieveActivities() = viewModelScope.launch {
+    private val _isDialogShown = MutableStateFlow(false)
+    val isDialogShown = _isDialogShown.asStateFlow()
+
+    suspend fun showDialog() = viewModelScope.launch {
+        _isDialogShown.value = true
+    }
+
+    suspend fun hideDialog() = viewModelScope.launch {
+        _isDialogShown.value = false
+    }
+
+    private suspend fun retrieveActivities() = viewModelScope.launch {
         try {
             api.getActivities(topicId).body()?.let { retrievedActivities ->
                 _activities.emit(retrievedActivities)
@@ -38,10 +49,25 @@ class ActivityViewModel(
         }
     }
 
-    private fun retrieveTitle() = viewModelScope.launch {
+    private suspend fun retrieveTitle() = viewModelScope.launch {
         try {
             api.getTopic(topicId).body()?.let { topic ->
                 _topic.emit(topic)
+            }
+        } catch (err: ConnectException) {
+            Log.i("ConnectionErr", "Failed to connect to server API")
+        }
+    }
+
+    suspend fun deleteActivity(checklist: Checklist) = viewModelScope.launch {
+        try {
+            checklist._id?.let {
+                if (api.deleteChecklist(it).isSuccessful) {
+                    hideDialog()
+                    retrieveActivities()
+                } else {
+                    // TODO Notify something went wrong
+                }
             }
         } catch (err: ConnectException) {
             Log.i("ConnectionErr", "Failed to connect to server API")

@@ -5,11 +5,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,7 +24,6 @@ import com.asanme.protocoldescriptor.model.enum.TaskStatus
 import com.asanme.protocoldescriptor.ui.component.*
 import com.asanme.protocoldescriptor.ui.theme.DarkBlue
 import com.asanme.protocoldescriptor.ui.theme.Pinkish
-import com.asanme.protocoldescriptor.ui.theme.Yellowish
 import com.asanme.protocoldescriptor.viewmodel.ChecklistViewModel
 
 @Composable
@@ -35,6 +31,12 @@ fun AddChecklistView(
     navController: NavController?,
     checklistViewModel: ChecklistViewModel
 ) {
+    val shouldReturn by checklistViewModel.shouldReturn.collectAsState()
+
+    if(shouldReturn) {
+        navController?.navigateUp()
+    }
+
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier
@@ -71,7 +73,7 @@ private fun ChecklistBody(
         TaskTitle()
     }
 
-    ActionContainer(checklistViewModel)
+    TaskContainer(checklistViewModel)
 }
 
 @Composable
@@ -165,39 +167,6 @@ private fun ChecklistFields(checklistViewModel: ChecklistViewModel) {
 }
 
 @Composable
-private fun CreateChecklistButton() {
-    CustomSquaredButton(
-        onClick = {
-        },
-        backgroundColor = Pinkish
-    ) {
-        CustomImage(
-            imageVectorResource = R.drawable.add,
-            contentDescriptionResource = R.string.add_icon
-        )
-    }
-}
-
-@Composable
-private fun EditButton() {
-    var isEditing by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    CustomSquaredButton(
-        onClick = {
-            isEditing = !isEditing
-        },
-        backgroundColor = Yellowish
-    ) {
-        CustomImage(
-            imageVectorResource = if (!isEditing) R.drawable.pencil else R.drawable.done,
-            contentDescriptionResource = R.string.return_arrow
-        )
-    }
-}
-
-@Composable
 private fun TaskTitle() {
     Text(
         text = stringResource(id = R.string.task_label),
@@ -209,7 +178,7 @@ private fun TaskTitle() {
 }
 
 @Composable
-private fun ActionContainer(
+private fun TaskContainer(
     checklistViewModel: ChecklistViewModel
 ) {
     val tasks = checklistViewModel.tasks

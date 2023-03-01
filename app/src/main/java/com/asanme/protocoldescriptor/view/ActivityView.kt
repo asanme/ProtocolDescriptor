@@ -3,7 +3,6 @@ package com.asanme.protocoldescriptor.view
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -14,14 +13,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.asanme.protocoldescriptor.R
+import com.asanme.protocoldescriptor.model.entity.Checklist
 import com.asanme.protocoldescriptor.model.enum.ViewRoutes
 import com.asanme.protocoldescriptor.ui.component.*
-import com.asanme.protocoldescriptor.ui.component.custom.AlertDialogSample
+import com.asanme.protocoldescriptor.ui.component.custom.DeleteChecklistDialog
 import com.asanme.protocoldescriptor.ui.theme.DarkBlue
 import com.asanme.protocoldescriptor.viewmodel.ActivityViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun ProtocolView(
+fun ActivityView(
     navController: NavHostController,
     activityViewModel: ActivityViewModel,
 ) {
@@ -75,11 +76,12 @@ fun ProtocolBody(
     navController: NavHostController,
     activityViewModel: ActivityViewModel
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val activities by activityViewModel.activities.collectAsState()
     var searchString by rememberSaveable { mutableStateOf("") }
-    var isDialogShown by remember {
-        mutableStateOf(false)
-    }
+    var clickedChecklist by remember { mutableStateOf(Checklist(null, "", "", mutableListOf())) }
+
+    val isDialogShown by activityViewModel.isDialogShown.collectAsState()
 
     CustomSearchBar(
         searchString,
@@ -113,13 +115,30 @@ fun ProtocolBody(
                         navController.navigate("${ViewRoutes.ChecklistView.route}/${currentItem.topicId}/${currentItem._id}")
                     },
                     onItemLongClicked = {
-                        isDialogShown = true
+                        coroutineScope.launch {
+                            activityViewModel.showDialog()
+                        }
+
+                        clickedChecklist = currentItem
                     }
                 )
             }
         }
 
-        AlertDialogSample(isMenuShown = isDialogShown)
+        DeleteChecklistDialog(
+            isMenuShown = isDialogShown,
+            onDismiss = {
+                coroutineScope.launch {
+                    activityViewModel.hideDialog()
+                }
+            },
+            onConfirm = {
+                coroutineScope.launch {
+                    activityViewModel.deleteActivity(clickedChecklist)
+                }
+            },
+            clickedChecklist
+        )
 
         FloatingActionButton(
             backgroundColor = Color.White,
