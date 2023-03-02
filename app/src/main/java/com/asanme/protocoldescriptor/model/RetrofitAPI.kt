@@ -34,7 +34,7 @@ interface RetrofitAPI {
     suspend fun getActivities(@Path("id") topicId: String): Response<List<Checklist>>
 
     @POST("/api/activities")
-    suspend fun postChecklist(@Body newChecklist: Checklist): Call<Checklist>
+    suspend fun postChecklist(@Body newChecklist: Checklist): Response<Checklist>
 
     @GET("/api/activities/checklists/{topicId}/{checklistId}")
     suspend fun getChecklist(

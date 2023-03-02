@@ -11,31 +11,46 @@ import com.asanme.protocoldescriptor.model.entity.ChecklistTask
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import retrofit2.awaitResponse
 import java.util.*
 
 class ChecklistViewModel(
-    private val checklistId: String? = null,
-    private val topicId: String,
     private val api: RetrofitAPI
 ) : ViewModel() {
+    private var _checklistId = MutableStateFlow<String?>(null)
+    val checklistId = _checklistId.asStateFlow()
+
+    private var _topicId = MutableStateFlow("")
+    private val topicId = _topicId.asStateFlow()
+
     private var _tasks = mutableStateListOf<ChecklistTask>()
     val tasks: MutableList<ChecklistTask> = _tasks
 
-    private var _checklist =
-        MutableStateFlow(Checklist(topicId = topicId, name = "", tasks = tasks))
+    private var _checklist = MutableStateFlow(
+        Checklist(
+            topicId = topicId.value,
+            name = "", tasks = tasks
+        )
+    )
     val checklist = _checklist.asStateFlow()
 
     private var _shouldReturn = MutableStateFlow(false)
     val shouldReturn = _shouldReturn.asStateFlow()
 
+
+    fun updateChecklistId(checklistId: String) = viewModelScope.launch {
+        _checklistId.emit(checklistId)
+    }
+
+    fun updateTopicId(topicId: String) = viewModelScope.launch {
+        _topicId.emit(topicId)
+    }
+
     fun uploadChanges() = viewModelScope.launch {
         try {
-            if (checklistId != null) {
-                _checklist.value = _checklist.value.copy(tasks = tasks)
-
+            _checklist.value = _checklist.value.copy(tasks = tasks)
+            checklistId.value?.let { checklistId ->
                 val response = api.putChecklist(
-                    topicId,
+                    topicId.value,
                     checklistId,
                     checklist.value
                 )
@@ -55,8 +70,8 @@ class ChecklistViewModel(
 
     fun retrieveTask() = viewModelScope.launch {
         try {
-            if (checklistId != null) {
-                val response = api.getChecklist(topicId, checklistId)
+            checklistId.value?.let { checklistId ->
+                val response = api.getChecklist(topicId.value, checklistId)
                 if (response.isSuccessful) {
                     response.body()?.let { retrievedChecklist ->
                         _checklist.emit(retrievedChecklist)
@@ -74,9 +89,9 @@ class ChecklistViewModel(
     // TODO Check server response to close AddChecklistView
     fun publishChecklist() = viewModelScope.launch {
         try {
-            val test = api.postChecklist(_checklist.value).awaitResponse()
+            val response = api.postChecklist(_checklist.value)
 
-            if(test.isSuccessful){
+            if (response.isSuccessful) {
                 _shouldReturn.emit(true)
             } else {
                 _shouldReturn.emit(true)
@@ -89,7 +104,7 @@ class ChecklistViewModel(
     fun changeTitle(newTitle: String) = viewModelScope.launch {
         _checklist.emit(
             Checklist(
-                topicId = topicId,
+                topicId = topicId.value,
                 name = newTitle,
                 tasks = _tasks
             )

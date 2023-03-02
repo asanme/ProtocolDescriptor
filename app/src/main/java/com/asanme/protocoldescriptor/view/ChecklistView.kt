@@ -127,7 +127,6 @@ private fun PreviewChecklist() {
     ChecklistView(
         null,
         ChecklistViewModel(
-            topicId = "",
             api = RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
         ),
     )

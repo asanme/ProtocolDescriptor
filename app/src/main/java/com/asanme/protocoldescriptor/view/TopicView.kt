@@ -28,10 +28,6 @@ fun TopicsView(
     navController: NavHostController,
     topicViewModel: TopicViewModel
 ) {
-    LaunchedEffect(key1 = topicViewModel.topics) {
-        topicViewModel.retrieveDatabase()
-    }
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp),

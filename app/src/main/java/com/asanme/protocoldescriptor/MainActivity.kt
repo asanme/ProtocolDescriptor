@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -42,6 +43,9 @@ class MainActivity : ComponentActivity() {
 fun App() {
     val retrofit = RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
     val navController = rememberNavController()
+    val topicViewModel = TopicViewModel(retrofit)
+    val activityViewModel = ActivityViewModel(retrofit)
+    val checklistViewModel = ChecklistViewModel(retrofit)
 
     NavHost(
         navController = navController,
@@ -50,30 +54,32 @@ fun App() {
         composable(ViewRoutes.TopicView.route) {
             TopicsView(
                 navController,
-                TopicViewModel(retrofit)
+                topicViewModel
             )
         }
 
         composable("${ViewRoutes.ProtocolView.route}/{topicId}") { backStackEntry ->
             backStackEntry.arguments?.getString("topicId")?.let { topicId ->
+                LaunchedEffect(navController) {
+                    activityViewModel.updateTopicId(topicId)
+                }
+
                 ActivityView(
                     navController,
-                    ActivityViewModel(
-                        topicId,
-                        retrofit
-                    ),
+                    activityViewModel
                 )
             }
         }
 
         composable("${ViewRoutes.AddChecklistView.route}/{topicId}") { backStackEntry ->
             backStackEntry.arguments?.getString("topicId")?.let { topicId ->
+                LaunchedEffect(navController) {
+                    checklistViewModel.updateTopicId(topicId)
+                }
+
                 AddChecklistView(
                     navController,
-                    ChecklistViewModel(
-                        topicId = topicId,
-                        api = retrofit
-                    ),
+                    checklistViewModel
                 )
             }
         }
@@ -93,13 +99,12 @@ fun App() {
             val checklistId = backStackEntry.arguments?.getString("checklistId")
 
             if (topicId != null && checklistId != null) {
+                checklistViewModel.updateChecklistId(checklistId)
+                checklistViewModel.updateTopicId(topicId)
+
                 ChecklistView(
                     navController,
-                    ChecklistViewModel(
-                        checklistId = topicId,
-                        topicId = checklistId,
-                        api = retrofit
-                    ),
+                    checklistViewModel
                 )
             }
         }

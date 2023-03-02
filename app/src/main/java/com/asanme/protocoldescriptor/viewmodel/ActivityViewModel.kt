@@ -12,15 +12,10 @@ import kotlinx.coroutines.launch
 import java.net.ConnectException
 
 class ActivityViewModel(
-    private val topicId: String,
     private val api: RetrofitAPI
 ) : ViewModel() {
-    init {
-        viewModelScope.launch {
-            retrieveActivities()
-            retrieveTitle()
-        }
-    }
+    private val _topicId = MutableStateFlow("")
+    val topicId = _topicId.asStateFlow()
 
     private val _activities = MutableStateFlow<List<Checklist>>(emptyList())
     val activities = _activities.asStateFlow()
@@ -30,6 +25,11 @@ class ActivityViewModel(
 
     private val _isDialogShown = MutableStateFlow(false)
     val isDialogShown = _isDialogShown.asStateFlow()
+
+    suspend fun loadDatabase() = viewModelScope.launch {
+        retrieveActivities()
+        retrieveTitle()
+    }
 
     suspend fun showDialog() = viewModelScope.launch {
         _isDialogShown.value = true
@@ -41,7 +41,7 @@ class ActivityViewModel(
 
     private suspend fun retrieveActivities() = viewModelScope.launch {
         try {
-            api.getActivities(topicId).body()?.let { retrievedActivities ->
+            api.getActivities(_topicId.value).body()?.let { retrievedActivities ->
                 _activities.emit(retrievedActivities)
             }
         } catch (err: ConnectException) {
@@ -51,7 +51,7 @@ class ActivityViewModel(
 
     private suspend fun retrieveTitle() = viewModelScope.launch {
         try {
-            api.getTopic(topicId).body()?.let { topic ->
+            api.getTopic(_topicId.value).body()?.let { topic ->
                 _topic.emit(topic)
             }
         } catch (err: ConnectException) {
@@ -72,5 +72,10 @@ class ActivityViewModel(
         } catch (err: ConnectException) {
             Log.i("ConnectionErr", "Failed to connect to server API")
         }
+    }
+
+    suspend fun updateTopicId(topicId: String) = viewModelScope.launch {
+        _topicId.emit(topicId)
+        loadDatabase()
     }
 }

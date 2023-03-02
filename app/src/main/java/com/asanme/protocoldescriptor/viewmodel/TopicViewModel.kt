@@ -14,10 +14,16 @@ import java.net.ConnectException
 class TopicViewModel(
     private val protocolApi: RetrofitAPI
 ) : ViewModel() {
+    init {
+        viewModelScope.launch {
+            retrieveDatabase()
+        }
+    }
+
     private val _topics: MutableStateFlow<List<Topic>> = MutableStateFlow(emptyList())
     val topics = _topics.asStateFlow()
 
-    suspend fun retrieveDatabase() = viewModelScope.launch {
+    private suspend fun retrieveDatabase() = viewModelScope.launch {
         try {
             protocolApi.getTopics().body()?.let { _topics.emit(it) }
             Log.i("TopicsValue", _topics.value.toString())

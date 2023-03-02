@@ -25,6 +25,7 @@ import com.asanme.protocoldescriptor.ui.component.*
 import com.asanme.protocoldescriptor.ui.theme.DarkBlue
 import com.asanme.protocoldescriptor.ui.theme.Pinkish
 import com.asanme.protocoldescriptor.viewmodel.ChecklistViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddChecklistView(
