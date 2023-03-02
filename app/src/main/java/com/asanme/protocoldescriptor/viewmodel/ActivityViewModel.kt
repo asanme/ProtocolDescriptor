@@ -3,6 +3,7 @@ package com.asanme.protocoldescriptor.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.asanme.protocoldescriptor.model.RetrofitAPI
 import com.asanme.protocoldescriptor.model.entity.Checklist
 import com.asanme.protocoldescriptor.model.entity.Topic
@@ -12,10 +13,11 @@ import kotlinx.coroutines.launch
 import java.net.ConnectException
 
 class ActivityViewModel(
-    private val api: RetrofitAPI
+    private val api: RetrofitAPI,
+    private val navController: NavHostController
 ) : ViewModel() {
     private val _topicId = MutableStateFlow("")
-    val topicId = _topicId.asStateFlow()
+    private val topicId = _topicId.asStateFlow()
 
     private val _activities = MutableStateFlow<List<Checklist>>(emptyList())
     val activities = _activities.asStateFlow()
@@ -26,37 +28,28 @@ class ActivityViewModel(
     private val _isDialogShown = MutableStateFlow(false)
     val isDialogShown = _isDialogShown.asStateFlow()
 
-    suspend fun loadDatabase() = viewModelScope.launch {
-        retrieveActivities()
-        retrieveTitle()
+    // Navigation Operations
+    fun goBack() = viewModelScope.launch {
+        navController.navigateUp()
     }
 
-    suspend fun showDialog() = viewModelScope.launch {
+    fun navigateToView(route: String) = viewModelScope.launch {
+        navController.navigate(route)
+    }
+
+    // Delete Menu Operations
+    fun showDialog() = viewModelScope.launch {
         _isDialogShown.value = true
     }
 
-    suspend fun hideDialog() = viewModelScope.launch {
+    fun hideDialog() = viewModelScope.launch {
         _isDialogShown.value = false
     }
 
-    private suspend fun retrieveActivities() = viewModelScope.launch {
-        try {
-            api.getActivities(_topicId.value).body()?.let { retrievedActivities ->
-                _activities.emit(retrievedActivities)
-            }
-        } catch (err: ConnectException) {
-            Log.i("ConnectionErr", "Failed to connect to server API")
-        }
-    }
-
-    private suspend fun retrieveTitle() = viewModelScope.launch {
-        try {
-            api.getTopic(_topicId.value).body()?.let { topic ->
-                _topic.emit(topic)
-            }
-        } catch (err: ConnectException) {
-            Log.i("ConnectionErr", "Failed to connect to server API")
-        }
+    // Modification Operations
+    suspend fun updateTopicId(topicId: String) = viewModelScope.launch {
+        _topicId.emit(topicId)
+        loadDatabase()
     }
 
     suspend fun deleteActivity(checklist: Checklist) = viewModelScope.launch {
@@ -74,8 +67,29 @@ class ActivityViewModel(
         }
     }
 
-    suspend fun updateTopicId(topicId: String) = viewModelScope.launch {
-        _topicId.emit(topicId)
-        loadDatabase()
+    // Loading data operations
+    private suspend fun loadDatabase() = viewModelScope.launch {
+        retrieveActivities()
+        retrieveTitle()
+    }
+
+    private suspend fun retrieveActivities() = viewModelScope.launch {
+        try {
+            api.getActivities(topicId.value).body()?.let { retrievedActivities ->
+                _activities.emit(retrievedActivities)
+            }
+        } catch (err: ConnectException) {
+            Log.i("ConnectionErr", "Failed to connect to server API")
+        }
+    }
+
+    private suspend fun retrieveTitle() = viewModelScope.launch {
+        try {
+            api.getTopic(topicId.value).body()?.let { topic ->
+                _topic.emit(topic)
+            }
+        } catch (err: ConnectException) {
+            Log.i("ConnectionErr", "Failed to connect to server API")
+        }
     }
 }

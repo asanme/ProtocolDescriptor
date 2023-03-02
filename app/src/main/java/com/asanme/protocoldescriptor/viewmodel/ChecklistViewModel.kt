@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavHostController
 import com.asanme.protocoldescriptor.model.RetrofitAPI
 import com.asanme.protocoldescriptor.model.entity.Checklist
 import com.asanme.protocoldescriptor.model.entity.ChecklistTask
@@ -14,10 +15,11 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class ChecklistViewModel(
-    private val api: RetrofitAPI
+    private val api: RetrofitAPI,
+    private val navController: NavHostController
 ) : ViewModel() {
     private var _checklistId = MutableStateFlow<String?>(null)
-    val checklistId = _checklistId.asStateFlow()
+    private val checklistId = _checklistId.asStateFlow()
 
     private var _topicId = MutableStateFlow("")
     private val topicId = _topicId.asStateFlow()
@@ -28,15 +30,18 @@ class ChecklistViewModel(
     private var _checklist = MutableStateFlow(
         Checklist(
             topicId = topicId.value,
-            name = "", tasks = tasks
+            name = "",
+            tasks = tasks
         )
     )
     val checklist = _checklist.asStateFlow()
 
-    private var _shouldReturn = MutableStateFlow(false)
-    val shouldReturn = _shouldReturn.asStateFlow()
+    // NavHostController
+    fun goBack() = viewModelScope.launch {
+        navController.navigateUp()
+    }
 
-
+    // Operations
     fun updateChecklistId(checklistId: String) = viewModelScope.launch {
         _checklistId.emit(checklistId)
     }
@@ -68,7 +73,9 @@ class ChecklistViewModel(
         }
     }
 
-    fun retrieveTask() = viewModelScope.launch {
+    suspend fun retrieveTask() = viewModelScope.launch {
+        clearTasks()
+
         try {
             checklistId.value?.let { checklistId ->
                 val response = api.getChecklist(topicId.value, checklistId)
@@ -86,15 +93,14 @@ class ChecklistViewModel(
         }
     }
 
-    // TODO Check server response to close AddChecklistView
     fun publishChecklist() = viewModelScope.launch {
         try {
             val response = api.postChecklist(_checklist.value)
 
             if (response.isSuccessful) {
-                _shouldReturn.emit(true)
+                goBack()
             } else {
-                _shouldReturn.emit(true)
+                goBack()
             }
         } catch (err: Exception) {
             Log.e("Exception", err.stackTraceToString())
@@ -112,15 +118,19 @@ class ChecklistViewModel(
     }
 
     // Local methods
-    fun addNewTask(task: ChecklistTask) {
+    fun clearTasks() = viewModelScope.launch {
+        _tasks.clear()
+    }
+
+    fun addNewTask(task: ChecklistTask) = viewModelScope.launch {
         _tasks.add(task)
     }
 
-    fun removeTask(task: ChecklistTask) {
+    fun removeTask(task: ChecklistTask) = viewModelScope.launch {
         _tasks.remove(task)
     }
 
-    fun modifyTask(taskID: UUID, modifiedTask: ChecklistTask) {
+    fun modifyTask(taskID: UUID, modifiedTask: ChecklistTask) = viewModelScope.launch {
         var index = 0
         var found = false
 

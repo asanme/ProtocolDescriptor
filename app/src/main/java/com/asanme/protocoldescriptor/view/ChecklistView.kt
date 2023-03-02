@@ -15,29 +15,23 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
-import com.asanme.protocoldescriptor.model.RetrofitAPI
 import com.asanme.protocoldescriptor.model.enum.TaskStatus
-import com.asanme.protocoldescriptor.model.helper.RetrofitHelper
 import com.asanme.protocoldescriptor.ui.component.*
 import com.asanme.protocoldescriptor.viewmodel.ChecklistViewModel
 
 @Composable
 fun ChecklistView(
-    navController: NavController?,
     checklistViewModel: ChecklistViewModel
 ) {
-    checklistViewModel.retrieveTask()
-
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier
             .fillMaxSize()
             .padding(10.dp),
     ) {
-        TopControls(navController, checklistViewModel)
+        TopControls(checklistViewModel)
         CustomProgressBar()
         ChecklistBody(checklistViewModel)
     }
@@ -45,7 +39,6 @@ fun ChecklistView(
 
 @Composable
 private fun TopControls(
-    navController: NavController?,
     checklistViewModel: ChecklistViewModel
 ) {
     val currentChecklist = checklistViewModel.checklist.collectAsState()
@@ -57,7 +50,7 @@ private fun TopControls(
         Box {
             CustomSquaredButton(
                 onClick = {
-                    navController?.navigateUp()
+                    checklistViewModel.goBack()
                 },
             ) {
                 CustomImage(
@@ -124,10 +117,4 @@ private fun ChecklistBody(
 @Preview(showSystemUi = true, device = Devices.NEXUS_6)
 @Composable
 private fun PreviewChecklist() {
-    ChecklistView(
-        null,
-        ChecklistViewModel(
-            api = RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
-        ),
-    )
 }

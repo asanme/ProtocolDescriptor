@@ -43,9 +43,9 @@ class MainActivity : ComponentActivity() {
 fun App() {
     val retrofit = RetrofitHelper.getInstance().create(RetrofitAPI::class.java)
     val navController = rememberNavController()
-    val topicViewModel = TopicViewModel(retrofit)
-    val activityViewModel = ActivityViewModel(retrofit)
-    val checklistViewModel = ChecklistViewModel(retrofit)
+    val topicViewModel = TopicViewModel(retrofit, navController)
+    val activityViewModel = ActivityViewModel(retrofit, navController)
+    val checklistViewModel = ChecklistViewModel(retrofit, navController)
 
     NavHost(
         navController = navController,
@@ -53,7 +53,6 @@ fun App() {
     ) {
         composable(ViewRoutes.TopicView.route) {
             TopicsView(
-                navController,
                 topicViewModel
             )
         }
@@ -65,7 +64,6 @@ fun App() {
                 }
 
                 ActivityView(
-                    navController,
                     activityViewModel
                 )
             }
@@ -74,11 +72,11 @@ fun App() {
         composable("${ViewRoutes.AddChecklistView.route}/{topicId}") { backStackEntry ->
             backStackEntry.arguments?.getString("topicId")?.let { topicId ->
                 LaunchedEffect(navController) {
+                    checklistViewModel.clearTasks()
                     checklistViewModel.updateTopicId(topicId)
                 }
 
                 AddChecklistView(
-                    navController,
                     checklistViewModel
                 )
             }
@@ -101,9 +99,11 @@ fun App() {
             if (topicId != null && checklistId != null) {
                 checklistViewModel.updateChecklistId(checklistId)
                 checklistViewModel.updateTopicId(topicId)
+                LaunchedEffect(navController) {
+                    checklistViewModel.retrieveTask()
+                }
 
                 ChecklistView(
-                    navController,
                     checklistViewModel
                 )
             }

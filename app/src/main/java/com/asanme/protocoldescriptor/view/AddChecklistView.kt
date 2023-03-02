@@ -5,18 +5,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
 import com.asanme.protocoldescriptor.model.entity.ChecklistTask
@@ -25,40 +25,27 @@ import com.asanme.protocoldescriptor.ui.component.*
 import com.asanme.protocoldescriptor.ui.theme.DarkBlue
 import com.asanme.protocoldescriptor.ui.theme.Pinkish
 import com.asanme.protocoldescriptor.viewmodel.ChecklistViewModel
-import kotlinx.coroutines.launch
 
 @Composable
 fun AddChecklistView(
-    navController: NavController?,
     checklistViewModel: ChecklistViewModel
 ) {
-    val shouldReturn by checklistViewModel.shouldReturn.collectAsState()
-
-    if(shouldReturn) {
-        navController?.navigateUp()
-    }
-
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier
             .fillMaxSize()
             .padding(10.dp),
     ) {
-        AddNewChecklistHeader(navController, checklistViewModel)
+        AddNewChecklistHeader(checklistViewModel)
         ChecklistBody(checklistViewModel)
     }
 }
 
 @Composable
-fun AddNewChecklistHeader(
-    navController: NavController?,
+private fun AddNewChecklistHeader(
     checklistViewModel: ChecklistViewModel
 ) {
-    TopControls(
-        navController,
-        checklistViewModel
-    )
-
+    TopControls(checklistViewModel)
     ChecklistFields(checklistViewModel)
 }
 
@@ -79,7 +66,6 @@ private fun ChecklistBody(
 
 @Composable
 private fun TopControls(
-    navController: NavController?,
     checklistViewModel: ChecklistViewModel
 ) {
     Row(
@@ -89,7 +75,7 @@ private fun TopControls(
         Box(Modifier.weight(2f)) {
             CustomSquaredButton(
                 onClick = {
-                    navController?.navigateUp()
+                    checklistViewModel.goBack()
                 },
             ) {
                 CustomImage(
@@ -134,7 +120,9 @@ private fun TopControls(
 }
 
 @Composable
-private fun ChecklistFields(checklistViewModel: ChecklistViewModel) {
+private fun ChecklistFields(
+    checklistViewModel: ChecklistViewModel
+) {
     var checklistName by rememberSaveable {
         mutableStateOf("")
     }
@@ -231,13 +219,4 @@ private fun TaskContainer(
             )
         }
     }
-}
-
-@Preview(
-    device = Devices.NEXUS_6,
-    showSystemUi = true
-)
-@Composable
-fun PreviewAddChecklist() {
-
 }

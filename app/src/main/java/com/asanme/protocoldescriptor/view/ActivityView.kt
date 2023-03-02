@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.model.entity.Checklist
 import com.asanme.protocoldescriptor.model.enum.ViewRoutes
@@ -23,7 +22,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ActivityView(
-    navController: NavHostController,
     activityViewModel: ActivityViewModel,
 ) {
     Column(
@@ -31,14 +29,13 @@ fun ActivityView(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.padding(10.dp)
     ) {
-        ProtocolHeader(navController, activityViewModel)
-        ProtocolBody(navController, activityViewModel)
+        ProtocolHeader(activityViewModel)
+        ProtocolBody(activityViewModel)
     }
 }
 
 @Composable
-fun ProtocolHeader(
-    navController: NavHostController,
+private fun ProtocolHeader(
     activityViewModel: ActivityViewModel
 ) {
     val title by activityViewModel.topic.collectAsState()
@@ -50,7 +47,7 @@ fun ProtocolHeader(
         Box(Modifier.weight(2f)) {
             CustomSquaredButton(
                 onClick = {
-                    navController.navigateUp()
+                    activityViewModel.goBack()
                 },
             ) {
                 CustomImage(
@@ -72,8 +69,7 @@ fun ProtocolHeader(
 }
 
 @Composable
-fun ProtocolBody(
-    navController: NavHostController,
+private fun ProtocolBody(
     activityViewModel: ActivityViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -112,7 +108,7 @@ fun ProtocolBody(
                 ChecklistPreviewItem(
                     currentItem,
                     onItemClicked = {
-                        navController.navigate("${ViewRoutes.ChecklistView.route}/${currentItem.topicId}/${currentItem._id}")
+                        activityViewModel.navigateToView("${ViewRoutes.ChecklistView.route}/${currentItem.topicId}/${currentItem._id}")
                     },
                     onItemLongClicked = {
                         coroutineScope.launch {
@@ -144,7 +140,7 @@ fun ProtocolBody(
             backgroundColor = Color.White,
             contentColor = DarkBlue,
             onClick = {
-                navController.navigate("${ViewRoutes.AddChecklistView.route}/${activityViewModel.topic.value._id}")
+                activityViewModel.navigateToView("${ViewRoutes.AddChecklistView.route}/${activityViewModel.topic.value._id}")
             },
         ) {
             CustomIcon(
