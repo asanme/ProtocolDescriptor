@@ -1,4 +1,4 @@
-package com.asanme.protocoldescriptor.ui.component
+package com.asanme.protocoldescriptor.ui.component.item
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -24,7 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
-import com.asanme.protocoldescriptor.model.entity.ProtocolTask
+import com.asanme.protocoldescriptor.ui.component.CustomImage
+import com.asanme.protocoldescriptor.ui.component.CustomTextField
 
 @Composable
 
@@ -118,7 +119,7 @@ fun EditProtocolItem() {
 
 @Composable
 fun EditProtocolItemPreview(
-    entity: ProtocolTask,
+    //entity: ProtocolTask,
     modifier: Modifier = Modifier,
     onYesClicked: () -> Unit,
     onNoClicked: () -> Unit,
@@ -143,7 +144,7 @@ fun EditProtocolItemPreview(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = entity.name,
+                    text = "",
                     fontFamily = interFamily,
                     fontWeight = FontWeight.Bold,
                     color = Color(3, 4, 94),
@@ -167,7 +168,7 @@ fun EditProtocolItemPreview(
 
 
             Text(
-                text = entity.description,
+                text = "",
                 fontFamily = interFamily,
                 fontWeight = FontWeight.Normal,
                 color = Color(3, 4, 94),
@@ -270,13 +271,6 @@ private fun TestEditAction() {
 @Composable
 private fun TestPreview() {
     Column(Modifier.fillMaxSize()) {
-        EditProtocolItemPreview(
-            ProtocolTask(
-                "Testing with the title",
-                "Lorem ipsum dolor sit amet, "
-            ),
-            onYesClicked = {},
-            onNoClicked = {}
-        )
+        EditProtocolItemPreview(onYesClicked = {}, onNoClicked = {})
     }
 }

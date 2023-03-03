@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.asanme.protocoldescriptor.R
 import com.asanme.protocoldescriptor.fonts.interFamily
-import com.asanme.protocoldescriptor.model.entity.ProtocolTask
 import com.asanme.protocoldescriptor.ui.component.*
 
 @Composable
@@ -156,41 +155,11 @@ private fun TaskTitle() {
 
 @Composable
 private fun TaskContainer() {
-    val currentTasks = ProtocolTask(
-        "First Element",
-        "Basic Description"
-    )
-
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        fun displayActionTree(currentTask: ProtocolTask) {
-            item {
-                EditProtocolItem()
-            }
 
-            item {
-                EditProtocolItemPreview(
-                    modifier = Modifier.padding(top = 5.dp),
-                    entity = currentTask,
-                    onYesClicked = {
-                    },
-                    onNoClicked = {
-                    }
-                )
-            }
-
-            currentTask.decisionYes?.let {
-                displayActionTree(it)
-            }
-
-            currentTask.decisionNo?.let {
-                displayActionTree(it)
-            }
-        }
-
-        displayActionTree(currentTasks)
     }
 }
 
